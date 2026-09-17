@@ -15,3 +15,8 @@
 *.docx   binary
 *.pptx   binary
 *.mp4    binary
+*.STEP   binary
+*.step   binary
+*.stp    binary
+*.igs    binary
+*.iges   binary
