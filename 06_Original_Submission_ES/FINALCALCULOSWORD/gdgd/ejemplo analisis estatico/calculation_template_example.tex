@@ -1,0 +1,372 @@
+\documentclass[]{article}
+\usepackage[spanish,es-nodecimaldot]{babel} %load spanish as the language
+%\usepackage[latin1]{inputenc} %allow to put stress in words without using latex commands
+%\usepackage[utf8]{inputenc} %use this in overleaf and comment the later
+\usepackage{lmodern}
+\usepackage[T1]{fontenc} %fix word stressing in the pdf file
+%\usepackage{mathtime} %Standard PostScript fonts
+\usepackage{amsmath} %Use special AMS-math environments
+\usepackage{graphicx} % Enable the inclusion of images.
+\usepackage{subfigure} % Enable inclusion of subfigures.
+\usepackage{floatrow}
+\usepackage{placeins}
+\usepackage{tikz,pgfplots,amssymb,bm,color}\pgfplotsset{compat=1.5.1}
+\usepackage{lastpage} % Required to print the total number of pages
+%\usepackage{graphics} % Enable the inclusion of images.
+\usepackage{array} % More control over tables
+\usepackage{titlesec}
+\usepackage[left=2cm,right=2cm,top=3cm,bottom=3cm]{geometry} % Adjust page margins
+\usepackage{fancyhdr}
+
+%modify the format of the section headers, removes numeration and add lines
+\titleformat{\section}{\normalfont\large\bfseries}{}{0pt}{\titlerule\newline\llap{}}[{\titlerule[0.4pt]}]
+%modify the format of the subsection headers, removes numeration
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{}{0pt}{}
+\setlength{\headheight}{80pt} % Increase the size of the header to accommodate meta-information
+\pagestyle{fancy}\fancyhf{} % Use the custom header specified below
+\renewcommand{\headrulewidth}{0pt} % Remove the default horizontal rule under the header 
+
+
+\def\proyecto{Diseño de ruteadora} %nombre del proyecto de diseño de máquinas
+\def\calculo{Cálculo estático 2D} %nombre del cálculo presentado
+\def\nombre{Armando Casas del Rio} % nombre de la persona que realiza los cálculos
+\def\revisor{Alvaro Alvarez Alvarado} %nombre de quien revisa los cálculos
+\def\fecha{19 de junio de 2019} % fecha de realización de los cálculos
+
+
+
+%----------------------------------------------------------------------------------------
+%	HEADER INFORMATION
+%----------------------------------------------------------------------------------------
+\fancyhead[L]{\begin{tabular}{| l l | l l |} % The header is a table with 4 columns
+\hline
+\textbf{Proyecto}   & \proyecto  & \textbf{Página}    & \thepage/\pageref{LastPage} \\ % Project name and page count
+\textbf{Cálculo}    & \calculo   & \textbf{Fecha}     & \fecha\\ % Fecha en la que se raliza el cálculo
+\textbf{Calculista} & \nombre    & \textbf{Revisor}   & \revisor \\ % Noombre del calculista y el revisor
+\hline
+\end{tabular}}
+
+%------------------------------------------------------------------------------%
+\begin{document}
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%\title{Juan Andr\'es Gallego S\'anchez}
+%\author{Optimización Topológica de Mecanismos Flexibles Balanceados Estáticamente\\
+%Ingeniería de diseño - Optimización}
+%\date{}
+%\maketitle
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Descripción}\label{sec:descripción}
+Se realiza el análisis estático 2D de la ruteadora de control numérico. El análisis se realizará mediante ecuaciones de equilibrio estático sobre cada una de las barras, no es necesario emplear ecuaciones de equilibrio nodal ya que los pares R son todos binarios.
+El sistema es un mecanismo 5 barras con 5 pares de revolución binarios.
+Se genera un sistema lineal de ecuaciones de 12 ecuaciones y 12 incognitas, donde 10 incognitas se corresponden con reacciones de los pares cinamáticos y 2 incognitas se corresponden con los 2 momentos de acutación de los 2 grados de libertad de la máquina.
+Dado que el mecanismos posee multiples configuraciones de posición se pretende realizar el análisis en al menos 9 configuraciones diferentes de forma que se pueda identificar la situación de carga mas alta sobre el mecanismo.
+La fuerza externa aplicada sobre el sistema se considera constante en magnitud y dirección en todas las 9 configuraciones del sistema.
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Objetivo del cálculo}\label{sec:objetivo}
+\begin{itemize}
+	\item Determinar las 10 fuerzas de reacción en los pares R de la cadena cinemática de la máquina en al menos 9 configuraciones de posición.
+	\item Determinar las 2 fuerzas de actuación en los dos GdL en al menos 9 configuraciones de posición.
+\end{itemize}
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Variables del modelo de cálculo}\label{sec:variables}
+
+\begin{table}[ht]
+    \centering
+    \caption{Variables empleadas en el modelo de cálculo.}
+		\label{tab:variables}
+		\renewcommand{\arraystretch}{1.1}% Tighter
+		\begin{tabular}{l l | l l}
+				\hline
+				Variable & Descripción & Variable & Descripción\\
+				\hline
+        $\varphi_1$ & ángulo de entrada barra 1      & $l_1$    & longitud de barra 1 \\
+				$\varphi_2$ & ángulo de entrada barra 2      & $l_2$    & longitud de barra 2 \\
+				$\varphi_3$ & ángulo de entrada barra 3      & $l_3$    & longitud de barra 3 \\
+				$\varphi_4$ & ángulo de entrada barra 4      & $l_4$    & longitud de barra 4 \\
+				$\varphi_5$ & ángulo de entrada barra 5      & $l_5$    & longitud de barra 5 \\
+				$M_2$       & momento de actuación del GdL   & $M_5$    & momento de actuación del GdL \\
+				$A_{x2}$    & reacción en x par R en nodo A  & $A_{y2}$ & reacción en y par R en nodo A \\
+				$B_{x2}$    & reacción en x par R en nodo B  & $B_{y2}$ & reacción en y par R en nodo B \\
+				$C_{x2}$    & reacción en x par R en nodo C  & $C_{y2}$ & reacción en y par R en nodo C \\
+				$D_{x2}$    & reacción en x par R en nodo D  & $D_{y2}$ & reacción en y par R en nodo D \\
+				$E_{x2}$    & reacción en x par R en nodo E  & $E_{y2}$ & reacción en y par R en nodo E \\
+				$F_{ext}$   & carga externa generada por la herramienta de corte & $\theta_{ext}$, $l_{ext}$ & orientación y posición de la carga externa\\
+        \hline
+		\end{tabular}
+\end{table}
+
+%\clearpage
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Imagen del modelo de cálculo}\label{sec:imagenes}
+
+%\begin{figure}[h!t]%
+    %\centering
+    %\includegraphics[scale=0.5]{figures/fivebar_linkage.pdf}
+    %\caption{Modelo gráfico del mecanismo de 5 barras.}
+%\end{figure}
+
+\begin{figure}[h!t]%
+    \centering\label{fig:SR_symmetry}
+    \subfigure[]{\label{fig:fivebar_linkage}\includegraphics[scale=0.4]{figures/fivebar_linkage.pdf}}\qquad
+    \subfigure[]{\label{fig:free_body_diagram_linkage}\includegraphics[scale=0.4]{Figures/free_body_diagram_linkage.pdf}}
+    \caption{(A) Modelo gráfico del mecanismo de 5 barras. (B) Orientación asumida para las reacciones en el diagrama de cuerpo libre.}
+\end{figure}
+\FloatBarrier
+
+%\clearpage
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Valores del modelo de cálculo}\label{sec:valores}
+
+los valores de las dimensiones del mecanismo se encuentran en la tabla \ref{tab:valores}.
+
+\begin{table}[h!t]
+    \centering
+    \caption{Variables empleadas en el modelo de cálculo.}
+		\label{tab:valores}
+		\renewcommand{\arraystretch}{1.1}% Tighter
+		\begin{tabular}{l l | l l}
+				\hline
+				Variable & Valor & Variable & Descripción\\
+				\hline
+        $l_1$     & 0.4m & $l_2$          & 0.2m \\
+				$l_3$     & 0.3m & $l_4$          & 0.3m \\
+				$l_5$     & 0.2m & $l_{ext}$      & 0.15m\\
+				$F_{ext}$ & 1N   & $\theta_{ext}$ & -60 grad \\
+        \hline
+		\end{tabular}
+\end{table}
+
+Los 9 valores de configuración de posición del mecanismo en terminos de los GdL $\varphi_2$ y $\varphi_5$, en los cuales se realizarán los análisis se pueden observar en la tabla \ref{tab:posicion}.
+
+\begin{table}[h!t]
+    \centering
+    \caption{Variables de la configuración de posición del mecanismo.}
+		\label{tab:posicion}
+		\renewcommand{\arraystretch}{1.1}% Tighter
+		\begin{tabular}{l l }
+				\hline
+				$\varphi_2$ [deg] & $\varphi_5$ [deg]\\
+				\hline
+         70   & 70  \\
+				 70   & 90  \\
+				 70   & 110 \\
+				 90   & 70  \\
+				 90   & 90  \\
+				 90   & 110 \\
+				 110  & 70  \\
+				 110  & 90  \\
+				 110  & 110 \\
+        \hline
+		\end{tabular}
+\end{table}
+
+\FloatBarrier
+%\clearpage
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Modelo de cálculo}\label{sec:modelo}
+
+Para el cálculo de las reacciones del sistema se deben obtener las ecuaciones de equilibrio para cada una de las barras del mecanismo.
+
+\subsection{ecuaciones de equilibrio cuerpo 2}
+
+\begin{equation}\label{eq:sumatorias2}
+    \begin{array}{l}
+		\sum {{f_x} = 0 = {A_x} + {B_x}} \\
+		\sum {{f_y} = 0 = {A_y} + {B_y}} \\
+		\sum {{M_z} = 0 = {M_2} + {B_y}{l_2}\cos {\varphi _2} - {B_x}{l_2}\sin {\varphi _2}} 
+		\end{array}
+\end{equation}
+
+\subsection{ecuaciones de equilibrio cuerpo 3}
+
+\begin{equation}\label{eq:sumatorias3}
+    \begin{array}{l}
+		\sum {{f_x} = 0 = -{B_x} - {C_x}} \\
+		\sum {{f_y} = 0 = -{B_y} - {C_y}} \\
+		\sum {{M_z} = 0 = -{C_y}{l_3}\cos {\varphi _3} + {C_x}{l_3}\sin {\varphi _3}} 
+		\end{array}
+\end{equation}
+
+\subsection{ecuaciones de equilibrio cuerpo 4}
+
+\begin{equation}\label{eq:sumatorias4}
+    \begin{array}{l}
+		\sum {{f_x} = 0 = {C_x} - {D_x} + {F_{ext}}\cos {\theta _{ext}}} \\
+		\sum {{f_y} = 0 = {C_y} - {D_y} + {F_{ext}}\sin {\theta _{ext}}} \\
+		\sum {{M_z} = 0 = {C_y}{l_4}\cos{\varphi _4} - {C_x}{l_4}\sin{\varphi _4} + {F_{ext}}\sin {\theta _{ext}}{l_{ext}}\cos{\varphi _4} - {F_{ext}}\cos{\theta _{ext}}{l_{ext}}\sin{\varphi _4}} 
+		\end{array}
+\end{equation}
+
+\subsection{ecuaciones de equilibrio cuerpo 5}
+
+\begin{equation}\label{eq:sumatorias5}
+    \begin{array}{l}
+		\sum {{f_x} = 0 = {D_x} + {E_x}} \\
+		\sum {{f_y} = 0 = {D_y} + {E_y}} \\
+		\sum {{M_z} = 0 = {M_5} + {D_y}{l_5}\cos {\varphi _5} - {D_x}{l_5}\sin {\varphi _5}} 
+		\end{array}
+\end{equation}
+
+
+\subsection{sistema total de ecuaciones}
+
+La solución del sistema de ecuaciones se obtiene al combinar todas las 12 ecuaciones en un sistema lineal. El vector de incognitas es representado por el vector $\bf{r}$, mientras que las fuerzas externas son representadas por el vector $\bf{f}$. La matriz de rigidez esta dada por la matriz de coeficientes $\bf{K}$.
+
+\begin{equation}\label{eq:equilibrio1}
+\begin{split}
+	\left[ {\bf{K}} \right]{\bf{r}} &= {{\bf{f}}_{ext}} \\
+	{\bf{r}} &= {\left[ {\bf{K}} \right]^{ - 1}}{{\bf{f}}_{ext}}
+\end{split}
+\end{equation}
+
+
+\begin{equation}\label{eq:stiffness_matrix}
+	{\bf{K}} = \left[ {\begin{array}{*{20}{c}}
+	1&0&1&0&0&0&0&0&0&0&0&0\\
+	0&1&0&1&0&0&0&0&0&0&0&0\\
+	0&0&{ - {l_2}\sin {\varphi _2}}&{{l_2}\cos {\varphi _2}}&0&0&0&0&0&0&1&0\\
+	0&0&{ - 1}&0&{ - 1}&0&0&0&0&0&0&0\\
+	0&0&0&{ - 1}&0&{ - 1}&0&0&0&0&0&0\\
+	0&0&0&0&{{l_3}\sin {\varphi _3}}&{ - {l_3}\cos {\varphi _3}}&0&0&0&0&0&0\\
+	0&0&0&0&1&0&{ - 1}&0&0&0&0&0\\
+	0&0&0&0&0&1&0&{ - 1}&0&0&0&0\\
+	0&0&0&0&{ - {l_4}\sin {\varphi _4}}&{{l_4}\cos {\varphi _4}}&0&0&0&0&0&0\\
+	0&0&0&0&0&0&1&0&1&0&0&0\\
+	0&0&0&0&0&0&0&1&0&1&0&0\\
+	0&0&0&0&0&0&{ - {l_5}\sin {\varphi _5}}&{{l_5}\cos {\varphi _5}}&0&0&0&1
+	\end{array}} \right]
+\end{equation}
+
+\begin{equation}\label{eq:forces}
+	\begin{array}{*{20}{c}}
+	{{\bf{r}} = \left[ {\begin{array}{*{20}{c}}
+	{{A_x}}\\
+	{{A_y}}\\
+	{{B_x}}\\
+	{{B_y}}\\
+	{{C_x}}\\
+	{{C_y}}\\
+	{{D_x}}\\
+	{{D_y}}\\
+	{{E_x}}\\
+	{{E_y}}\\
+	{{M_2}}\\
+	{{M_5}}
+	\end{array}} \right]}&{}&{}&{{{\bf{f}}_{ext}} = \left[ {\begin{array}{*{20}{c}}
+	0\\
+	0\\
+	0\\
+	0\\
+	0\\
+	0\\
+	{ - {F_{ext}}\cos {\theta _{ext}}}\\
+	{ - {F_{ext}}\sin {\theta _{ext}}}\\
+	{ - {F_{ext}}\sin {\theta _{ext}}{l_{ext}}\cos {\varphi _4} + {F_{ext}}\cos {\theta _{ext}}{l_{ext}}\sin {\varphi _4}}\\
+	0\\
+	0\\
+	0
+	\end{array}} \right]}
+	\end{array}
+\end{equation}
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Resultados y conclusiones del modelo de cálculo}\label{sec:conclusion}
+
+Se han obtenido los valores de las fuerzas de actuación para los dos grados de libertad en las 9 configuraciones de posición, tal y como se observa en la tabla \ref{tab:fuerzas_actuacion}.
+
+\begin{table}[h!t]
+    \centering
+    \caption{Fuerzas de actuación.}
+		\label{tab:fuerzas_actuacion}
+		\renewcommand{\arraystretch}{1.1}% Tighter
+		\begin{tabular}{l l l l l l l l l}
+				\hline
+				$\varphi_2$ (deg) & $\varphi_5$ (deg) & $M_2$ (N-m) & $M_5$ (N-m) & $A$ (N) & $B$ (N) & $C$ (N) & $D$ (N) & $E$ (N)\\
+				\hline
+        70  & 70  & -0.008 & 0.161 & 0.103 & 0.103 & 0.103 & 0.973 & 0.973\\
+				%70  & 80  & -0.005 & 0.136 &  &  &  &  &  \\
+        70  & 90  & -0.002 & 0.106 & 0.053 & 0.053 & 0.053 & 0.976 & 0.976\\
+				%70  & 100 &  0.0   & 0.070 &  &  &  &  &  \\
+				70  & 110 &  0.0   & 0.028 & 0.044 & 0.044 & 0.044 & 1.025 & 1.025\\
+				%80  & 70  & -0.016 & 0.165 &  &  &  &  &  \\ 
+				%80  & 80  & -0.011 & 0.139 &  &  &  &  &  \\ 
+				%80  & 90  & -0.007 & 0.109 &  &  &  &  &  \\ 
+				%80  & 100 & -0.003 & 0.073 &  &  &  &  &  \\ 
+				%80  & 110 &  0.002 & 0.031 &  &  &  &  &  \\ 
+				90  & 70  & -0.028 & 0.172 & 0.174 & 0.174 & 0.174 & 0.993 & 0.993\\
+				%90  & 80  & -0.020 & 0.145 &  &  &  &  &  \\ 
+				90  & 90  & -0.014 & 0.114 & 0.103 & 0.103 & 0.103 & 0.973 & 0.973\\
+				%90  & 100 & -0.008 & 0.078 &  &  &  &  &  \\ 
+				90  & 110 & -0.002 & 0.037 & 0.014 & 0.014 & 0.014 & 0.994 & 0.994\\
+				%100 & 70  & -0.044 & 0.183 &  &  &  &  &  \\ 
+				%100 & 80  & -0.033 & 0.153 &  &  &  &  &  \\ 
+				%100 & 90  & -0.024 & 0.121 &  &  &  &  &  \\ 
+				%100 & 100 & -0.016 & 0.085 &  &  &  &  &  \\ 
+				%100 & 110 & -0.008 & 0.044 &  &  &  &  &  \\ 
+				110 & 70  & -0.069 & 0.201 & 0.345 & 0.345 & 0.345 & 1.077 & 1.077\\
+				%110 & 80  & -0.050 & 0.166 &  &  &  &  &  \\ 
+				110 & 90  & -0.037 & 0.130 & 0.199 & 0.199 & 0.199 & 0.985 & 0.985\\
+				%110 & 100 & -0.027 & 0.093 &  &  &  &  &  \\ 
+				110 & 110 & -0.018 & 0.053 & 0.103 & 0.103 & 0.103 & 0.973 & 0.973\\
+				\hline
+		\end{tabular}
+\end{table}
+
+En la figura \ref{fig:momentos} se presenta gráficamente el comportamiento de los momentos de actuación $M_2$ y $M_5$ para las diferentes 9 configuraciones cinemáticas. Se puede observar que el mayor valor de actuación es requerido cuando el mecanismo se encuentra en la configuración $\varphi_2=110$ y $\varphi_2=70$, la cual se correponde a una configuración donde la fuerza externa tiende a ser perpendicular respecto a la barra en la cual ésta se aplica (barra 4).
+
+Respecto a las cargas de reacción en los pares R se observa que el valor crítico se encuentra en el pin D alrededor de la configuración $\varphi_2=110$ y $\varphi_2=70$, la cual es la misma configuración crítica para el valor de los momentos de actuación. Este es el valor de fuerza de reacción que se empleara para el diseño de los pares R.
+
+
+\begin{figure}[h!t]
+    \centering\label{fig:momentos}
+    \subfigure[]{\label{fig:momento_m2}
+			\begin{tikzpicture}
+				\begin{axis}[view={30}{30},colormap/jet,xlabel={$\varphi_2$ [deg]},ylabel={$\varphi_5$ [deg]},zlabel={$M_2$ [N]},
+				,title style={text width=60mm},xmax=120,xmin=60,ymax=120,ymin=60,zmax=0.05,zmin=-0.05,xtick={110,90,70},ytick={110,90,70},grid]
+				\addplot3[surf,] coordinates {
+					(70,70,-0.008) (70,80,-0.005) (70,90,-0.002) (70,100,0.0) (70,110,0.0)
+					
+					(80,70,-0.016) (80,80,-0.011) (80,90,-0.007) (80,100,-0.003) (80,110,0.002) 
+					
+					(90,70,-0.028) (90,80,-0.020) (90,90,-0.014) (90,100,-0.008) (90,110,-0.002)
+					
+					(100,70,-0.044) (100,80,-0.033) (100,90,-0.024) (100,100,-0.016) (100,110,-0.008) 
+					
+					(110,70,-0.069) (110,80,-0.050) (110,90,-0.037) (110,100,-0.027) (110,110,-0.018)
+				};
+				\end{axis}
+			\end{tikzpicture}}
+		\quad
+    \subfigure[]{\label{fig:momento_m5}\includegraphics[scale=1]{figures/plot_moments_M_5.pdf}}
+    \caption{Momento $M_2$ y $M_5$ en función de las configuraciones de posición $\varphi_2$ y $\varphi_5$.}
+\end{figure}
+
+ 
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\end{document} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

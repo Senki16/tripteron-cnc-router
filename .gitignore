@@ -1,0 +1,44 @@
+# LaTeX build products
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Large binary archives kept locally only
+*.zip
+*.rar
+*.7z
+
+# Media
+*.mp4
+*.mov
+
+# SolidWorks backups and locks
+*.sldbak
+~$*
+*.SLDLFP.bak
+backup*/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# SolidWorks simulation result databases (regenerable, large)
+*.CWR
+*.cwr

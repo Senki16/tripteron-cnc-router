@@ -1,0 +1,349 @@
+\documentclass[]{article}
+\usepackage[spanish,es-nodecimaldot]{babel} %load spanish as the language
+%\usepackage[latin1]{inputenc} %allow to put stress in words without using latex commands
+%\usepackage[utf8]{inputenc} %use this in overleaf and comment the later
+\usepackage{lmodern}
+\usepackage[T1]{fontenc} %fix word stressing in the pdf file
+%\usepackage{mathtime} %Standard PostScript fonts
+\usepackage{amsmath} %Use special AMS-math environments
+\usepackage{graphicx} % Enable the inclusion of images.
+\usepackage{subfigure} % Enable inclusion of subfigures.
+\usepackage{floatrow}
+\usepackage{placeins}
+\usepackage{tikz,pgfplots,amssymb,bm,color}\pgfplotsset{compat=1.5.1}
+\usepackage{lastpage} % Required to print the total number of pages
+%\usepackage{graphics} % Enable the inclusion of images.
+\usepackage{array} % More control over tables
+\usepackage{titlesec}
+\usepackage[left=2cm,right=2cm,top=3cm,bottom=3cm]{geometry} % Adjust page margins
+\usepackage{fancyhdr}
+
+%modify the format of the section headers, removes numeration and add lines
+\titleformat{\section}{\normalfont\large\bfseries}{}{0pt}{\titlerule\newline\llap{}}[{\titlerule[0.4pt]}]
+%modify the format of the subsection headers, removes numeration
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{}{0pt}{}
+\setlength{\headheight}{80pt} % Increase the size of the header to accommodate meta-information
+\pagestyle{fancy}\fancyhf{} % Use the custom header specified below
+\renewcommand{\headrulewidth}{0pt} % Remove the default horizontal rule under the header 
+
+
+\def\proyecto{Diseño de ruteadora} %nombre del proyecto de diseño de máquinas
+\def\calculo{Cálculo cinemático 2D} %nombre del cálculo presentado
+\def\nombre{Armando Casas del Rio} % nombre de la persona que realiza los cálculos
+\def\revisor{Alvaro Alvarez Alvarado} %nombre de quien revisa los cálculos
+\def\fecha{19 de junio de 2019} % fecha de realización de los cálculos
+
+
+
+%----------------------------------------------------------------------------------------
+%	HEADER INFORMATION
+%----------------------------------------------------------------------------------------
+\fancyhead[L]{\begin{tabular}{| l l | l l |} % The header is a table with 4 columns
+\hline
+\textbf{Proyecto}   & \proyecto  & \textbf{Página}    & \thepage/\pageref{LastPage} \\ % Project name and page count
+\textbf{Cálculo}    & \calculo   & \textbf{Fecha}     & \fecha\\ % Fecha en la que se raliza el cálculo
+\textbf{Calculista} & \nombre    & \textbf{Revisor}   & \revisor \\ % Noombre del calculista y el revisor
+\hline
+\end{tabular}}
+
+%------------------------------------------------------------------------------%
+\begin{document}
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%\title{Juan Andr\'es Gallego S\'anchez}
+%\author{Optimización Topológica de Mecanismos Flexibles Balanceados Estáticamente\\
+%Ingeniería de diseño - Optimización}
+%\date{}
+%\maketitle
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Descripción}\label{sec:descripción}
+Se realiza el análisis cinemático 2D de la ruteadora de control numérico. El análisis se realizará mediante ecuaciones de cierre vectorial sobre cada uno de los ciclos de la cadena cinemática.
+El sistema es un mecanismo 8 barras con 6 pares de revolución binarios y 3 pares prismaticos.
+La ecuación de restricción resultante posee 6 ecuaciones de restricción y 3 ecuaciones de actuación. Para la solución de posición se genera un sistema no-lineal de ecuaciones de 9 ecuaciones y 9 incognitas, donde 3 incognitas se corresponden con los 3 grados de libertad de actuación del mecanismos, 3 incognitas se corresponden con la orientación de las barras intermedias y 3 incognitas se corresponden a los 3 grados de libertad de la efección.
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Objetivo del cálculo}\label{sec:objetivo}
+\begin{itemize}
+	\item Determinar las 9 variables cinemáticas de posión.
+	\item Determinar las 9 variables cinemáticas de velocidad.
+	\item Determinar las 9 variables cinemáticas de aceleración.
+	\item Determinar el espacion de trabajo de la ruteadora.
+\end{itemize}
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Variables del modelo de cálculo}\label{sec:variables}
+
+\begin{table}[ht]
+    \centering
+    \caption{Variables empleadas en el modelo de cálculo.}
+		\label{tab:variables}
+		\renewcommand{\arraystretch}{0.8}% Tighter
+		\begin{tabular}{l l | l l}
+			\hline
+			Variable & Descripción & Variable & Descripción\\
+			\hline
+      $a_1$ 				 & distancia del GCS al origen del actuador 1      			 & $c_1$    & longitud de barra c1 \\
+			$a_2$ 				 & distancia del GCS al origen del actuador 2      			 & $c_2$    & longitud de barra c2 \\
+			$a_3$ 				 & distancia del GCS al origen del actuador 3      			 & $c_3$    & longitud de barra c3 \\
+			$\varphi_{a1}$ & orientación del origen del actuador 1 respecto al GCS & $\varphi_{c1}$    & orientación de barra c1 \\
+			$\varphi_{a2}$ & orientación del origen del actuador 1 respecto al GCS & $\varphi_{c2}$    & orientación de barra c2 \\
+			$\varphi_{a3}$ & orientación del origen del actuador 1 respecto al GCS & $\varphi_{c3}$    & orientación de barra c3 \\
+			$b_1$    			 & carrera del actuador 1																 & $d$ & radio del efector \\
+			$b_2$    			 & carrera del actuador 2																 & $p_x$ & posición $x$ del efector \\
+			$b_3$    			 & carrera del actuador 3																 & $p_y$ & posición $y$ del efector \\
+			$\varphi_{b1}$ & orientación del actuador 1 respecto al GCS						 & $\theta$ & orientación del efector \\
+			$\varphi_{b2}$ & orientación del actuador 2 respecto al GCS	& &\\
+			$\varphi_{b3}$ & orientación del actuador 3 respecto al GCS	& &\\
+			$p_x^0, \dot{p}_x^0, \ddot{p}_x^0$ & posición, velocidad y aceleración inicial del efector en $x$ & &\\
+			$p_y^0, \dot{p}_y^0, \ddot{p}_y^0$ & posición, velocidad y aceleración inicial del efector en $y$ & &\\
+			$\theta^0, \dot{\theta}^0, \ddot{\theta}^0$ & posición, velocidad y aceleración angular inicial del efector & &\\
+      \hline
+		\end{tabular}
+\end{table}
+
+\clearpage
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Imagen del modelo de cálculo}\label{sec:imagenes}
+
+%\begin{figure}[h!t]%
+    %\centering
+    %\includegraphics[scale=0.5]{figures/fivebar_linkage.pdf}
+    %\caption{Modelo gráfico del mecanismo de 5 barras.}
+%\end{figure}
+\begin{figure}[h!t]%
+    \centering\label{fig:SR_symmetry}
+    \subfigure[]{\label{fig:3PRR_diagram}\includegraphics[scale=0.5]{Figuras/3PRR_diagram.pdf}}\qquad
+    \subfigure[]{\label{fig:3PRR_close_loop}\includegraphics[scale=0.5]{Figuras/3PRR_close_loop.pdf}}
+    \caption{(a) Esquema del manipular de 3PRR. (b) Configuración de los vectores que construyen la ecuación de cierre vectorial.}
+\end{figure}
+\FloatBarrier
+
+%\clearpage
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Valores del modelo de cálculo}\label{sec:valores}
+
+los valores de las dimensiones del mecanismo se encuentran en la tabla \ref{tab:valores}.
+
+\begin{table}[h!t]
+    \centering
+    \caption{Variables empleadas en el modelo de cálculo.}
+		\label{tab:valores}
+		\renewcommand{\arraystretch}{1.1}% Tighter
+		\begin{tabular}{l l | l l}
+				\hline
+				Variable & Valor & Variable & Descripción\\
+				\hline
+        $a_1$          & 0.5m    & $c_1$          &  0.4m \\
+				$a_2$          & 0.5m    & $c_2$          &  0.4m \\
+				$a_3$          & 0.5m    & $c_3$      		&  0.4m\\
+				$\varphi_{a1}$ & -30grad & $\varphi_{b1}$ &  60 grad \\
+				$\varphi_{a2}$ &  90grad & $\varphi_{b2}$ & 180 grad \\
+				$\varphi_{a3}$ & 210grad & $\varphi_{b3}$ & 300 grad \\
+				$d$						 & 0.2m		 &                & \\
+        \hline
+		\end{tabular}
+\end{table}
+
+
+\FloatBarrier
+\clearpage
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Modelo de cálculo}\label{sec:modelo}
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\subsection{Análisis de posición}
+Para el cálculo de la solución de posición se emplea la ecuación de restricción derivada de los cierres vectoriales mostrados en Fig. \ref{fig:3PRR_close_loop} y el cálculo de la matriz Jacobiana. La solución del sistema no-lineal de ecuaciones se realiza mediante un esquema iterativo Newton-Raphson.
+
+\subsubsection*{vector de incógnitas}
+
+\begin{equation}\label{eq:unknowns}
+	\mathbf{q}=\begin{bmatrix}
+	b_1 & b_2 & b_3 & \varphi_{c1} & \varphi_{c2} & \varphi_{c3} & p_x & p_y & \theta 
+	\end{bmatrix}^T
+\end{equation}
+
+\subsubsection*{ecuación de restricción}
+
+\begin{equation}\label{eq:constraint_equation}
+	%\resizebox{.9\hsize}{!}{$
+	\mathbf{\Phi}=\mathbf{0}=
+	\begin{bmatrix}
+	 a_1\cos(\varphi_{a1})+b_1\cos(\varphi_{b1})-c_1\cos(\varphi_{c1})-d\cos(\theta-\pi/6)-p_x\\
+	 a_1\sin(\varphi_{a1})+b_1\sin(\varphi_{b1})-c_1\sin(\varphi_{c1})-d\sin(\theta-\pi/6)-p_y\\
+	 a_2\cos(\varphi_{a2})+b_2\cos(\varphi_{b2})-c_2\cos(\varphi_{c2})-d\cos(\theta+\pi/2)-p_x\\
+	 a_2\sin(\varphi_{a2})+b_2\sin(\varphi_{b2})-c_2\sin(\varphi_{c2})-d\sin(\theta+\pi/2)-p_y\\
+	 a_3\cos(\varphi_{a3})+b_3\cos(\varphi_{b3})-c_3\cos(\varphi_{c3})-d\cos(\theta+7\pi/6)-p_x\\
+	 a_3\sin(\varphi_{a3})+b_3\sin(\varphi_{b3})-c_3\sin(\varphi_{c3})-d\sin(\theta+7\pi/6)-p_y\\
+	 p_x - p^0_{x} - \dot{p}^0_{x} t - {\scriptstyle  \frac{1}{2}}\ddot{p}^0_{x} t^2\\
+	 p_y - p^0_{y} - \dot{p}^0_y t - {\scriptstyle  \frac{1}{2}}\ddot{p}^0_y t^2\\
+   \theta - \theta^{0} - \dot{\theta}^{0} t - {\scriptstyle  \frac{1}{2}}\ddot{\theta}^{0} t^2\\
+	\end{bmatrix}
+	%$}
+\end{equation}
+
+\subsubsection*{Jacobiano}
+
+\begin{equation}\label{eq:jacobian}
+	%\resizebox{.9\hsize}{!}{$
+	\mathbf{J}=
+	\begin{bmatrix}
+	\cos(\varphi_{b1}) & 0 & 0 & c_1\sin(\varphi_{c1}) & 0 & 0 & -1 & 0 & d\sin(\theta-\pi/6) \\
+	\sin(\varphi_{b1}) & 0 & 0 & -c_1\cos(\varphi_{c1}) & 0 & 0 & 0 & -1 & -d\cos(\theta-\pi/6) \\
+	0 & \cos(\varphi_{b2}) & 0 & 0 & c_2\sin(\varphi_{c2}) & 0 & -1 & 0 & d\sin(\theta+\pi/2) \\
+	0 & \sin(\varphi_{b2}) & 0 & 0 & -c_2\cos(\varphi_{c2}) & 0 & 0 & -1 & -d\cos(\theta+\pi/2) \\
+	0 & 0 & \cos(\varphi_{b3}) & 0 & 0 & c_3\sin(\varphi_{c3}) & -1 & 0 & d\sin(\theta+7\pi/6) \\
+	0 & 0 & \sin(\varphi_{b3}) & 0 & 0 & -c_3\cos(\varphi_{c3}) & 0 & -1 & -d\cos(\theta+7\pi/6) \\
+	0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1
+	\end{bmatrix}
+	%$}
+\end{equation}
+
+\subsubsection*{Newton-Raphson}
+
+\begin{equation}\label{eq:newton-raphson}
+	\mathbf{q}^{i+1}=-[\mathbf{J(q}^i)]^{-1}\mathbf{\Phi}(\mathbf{q}^i)+\mathbf{q}^i
+\end{equation}
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\subsection{Análisis de velocidad}
+Para el cálculo de la solución de velocidad se emplea el Jacobiano calculado anteriormente y el vector de derivada explicitas del tiempo de la ecuación de restricción, eq. \ref{eq:constraint_equation}.
+
+\begin{equation}\label{eq:velocity_solution}
+	\mathbf{\dot{q}}=-[\mathbf{J}^{-1}]\mathbf{\Phi}_{,t}
+\end{equation}
+
+donde los vectores $\mathbf{\Phi}_{,t}$ y $\mathbf{\dot{q}}$ estan dados por,
+
+\begin{equation}\label{eq:phi_t}
+	\mathbf{\Phi}_{,t}=
+	\begin{bmatrix}
+		0 & 0 & 0 & 0 & 0 & 0 & (-\dot{p}^0_{x} - \ddot{p}^0_{x} t) & (-\dot{p}^0_y - \ddot{p}^0_y t) & (-\dot{\theta}^{0} - \ddot{\theta}^{0} t)
+	\end{bmatrix}^T
+\end{equation}
+
+\begin{equation}\label{eq:q_dot}
+	\mathbf{\dot{q}}=
+	\begin{bmatrix}
+		\dot{b}_1 & \dot{b}_2 & \dot{b}_3 & \dot{\varphi}_{c1} & \dot{\varphi}_{c2} & \dot{\varphi}_{c3} & \dot{p}_x & \dot{p}_y & \dot{\theta}
+	\end{bmatrix}^T
+\end{equation}
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\subsection{Análisis de aceleración}
+Para el cálculo de la solución de aceleración se emplea el Jacobiano calculado anteriormente, el vector de la segunda derivada explicita del tiempo de la ecuación de restricción, eq. \ref{eq:constraint_equation}, la solución de velocidad y la derivada en el tiempo del Jacobiano.
+
+\subsubsection*{derivada del Jacobiano y segunda derivada explicita del tiempo de la ecuación de restricción}
+
+\begin{equation}\label{eq:jacobian_p}
+	\dot{\mathbf{J}}=
+	\begin{bmatrix}
+		0 & 0 & 0 & c_1\cos(\varphi_{c1})\dot{\varphi}_{c1} & 0 & 0 & 0 & 0 & d\cos(\theta-\pi/6)\dot{\theta} \\
+    0 & 0 & 0 & c_1\sin(\varphi_{c1})\dot{\varphi}_{c1} & 0 & 0 & 0 & 0 & d\sin(\theta-\pi/6)\dot{\theta} \\
+    0 & 0 & 0 & 0 & c_2\cos(\varphi_{c2})\dot{\varphi}_{c2} & 0 & 0 & 0 & d\cos(\theta+\pi/2)\dot{\theta} \\
+    0 & 0 & 0 & 0 & c_2\sin(\varphi_{c2})\dot{\varphi}_{c2} & 0 & 0 & 0 & d\sin(\theta+\pi/2)\dot{\theta} \\
+    0 & 0 & 0 & 0 & 0 & c_3\cos(\varphi_{c3})\dot{\varphi}_{c3} & 0 & 0 & d\cos(\theta+7\pi/6)\dot{\theta} \\
+    0 & 0 & 0 & 0 & 0 & c_3\sin(\varphi_{c3})\dot{\varphi}_{c3} & 0 & 0 & d\sin(\theta+7\pi/6)\dot{\theta} \\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+	\end{bmatrix}
+\end{equation}
+
+\begin{equation}\label{eq:phi_tt}
+	\mathbf{\Phi}_{,tt}=
+	\begin{bmatrix}
+		0 & 0 & 0 & 0 & 0 & 0 & -\ddot{p}^0_{x} & -\ddot{p}^0_y & -\ddot{\theta}^{0}
+	\end{bmatrix}^T
+\end{equation}
+
+\subsubsection*{solución de la aceleración}
+
+\begin{equation}\label{eq:acceleration_solution}
+	\mathbf{\ddot{q}}=-[\mathbf{J}^{-1}](\mathbf{\dot{J}}\mathbf{\dot{q}}+\mathbf{\Phi}_{,tt})
+\end{equation}
+
+donde el vector $\mathbf{\dot{q}}$ esta dado por,
+
+\begin{equation}\label{eq:q_ddot}
+	\mathbf{\dot{q}}=
+	\begin{bmatrix}
+		\ddot{b}_1 & \ddot{b}_2 & \ddot{b}_3 & \ddot{\varphi}_{c1} & \ddot{\varphi}_{c2} & \ddot{\varphi}_{c3} & \ddot{p}_x & \ddot{p}_y & \ddot{\theta}
+	\end{bmatrix}^T
+\end{equation}
+
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\section{Resultados y conclusiones del modelo de cálculo}\label{sec:conclusion}
+
+
+%------------------------------------------------------------------------------%
+\subsection{Espacio de trabajo}
+El espacio de trabajo de la ruteadora se obtiene al realizar el análisis de posición en múltiples puntos en un dominio dado por la malla $x=[-0.2,0.2]$ y $y=[-0.2,0.2]$. El espacio de trabajo son los puntos donde el análisis de posición presenta convergencia. Es importante notar que cada punto $(x,y)$ del dominio de efeccion puede ser alcanzado en múltiples valores de rotación del efector. En la fig. \ref{fig:3PRR_workspace} el mapa de color del espacio de trabajo representa la cantidad de rotación ($\Delta\theta$) que el efector puede lograr en dicho punto.
+
+Note que la ruteadora en su posición central, coordenada $(0,0)$, el efector puede logar el máximo valor de rotación de $120^o$, a medida que el efector se acerca a la frontera del espacio de trabajo la cantidad de rotación se reduce hasta llegar a un valor único angular, es decir que el efector solo se ubica en la frontera del espacio de trabajo con un valor único de orientación.
+
+\begin{figure}[h!t]%
+    \centering
+    \includegraphics[scale=0.95]{Figuras/3PRR_workspace.pdf}
+    \caption{Espacio de trabajo de la ruteadora. Los valores de $x$ y $y$ representan la posición en el plano del centro del efector mientras que la altura $z$ representa el valor de rotación ($\Delta\theta$) que el efector puede lograr en dicho punto.}
+    \label{fig:3PRR_workspace}
+\end{figure}
+\FloatBarrier
+%------------------------------------------------------------------------------%
+
+
+\subsection{Función de actuación inversa}
+En la fig. \ref{fig:actuation_function} se observan los valores de la carrera de los tres actuadores $b_1$, $b_2$ y $b_3$ en función de las coordenadas $(x,y)$ de la posición del centro del efector.
+
+\begin{figure}[h!t]%
+    \centering\label{fig:actuation_function}
+    \subfigure[]{\label{fig:actuation_function_1}\includegraphics[scale=0.55]{Figuras/actuation_function_1.pdf}}\quad
+		\subfigure[]{\label{fig:actuation_function_2}\includegraphics[scale=0.55]{Figuras/actuation_function_2.pdf}}\quad
+    \subfigure[]{\label{fig:actuation_function_3}\includegraphics[scale=0.55]{Figuras/actuation_function_3.pdf}}
+    \caption{Valor de la carrera de los actuadores en función de la posición $(x,y)$ del efector, (a) para el actuador $b_1$ . (b) para el actuador $b_2$. (c) para el actuador $b_3$.}
+\end{figure}
+ 
+%------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
+\end{document} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

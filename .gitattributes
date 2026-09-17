@@ -1,0 +1,17 @@
+* text=auto eol=lf
+
+*.sldprt binary
+*.sldasm binary
+*.slddrw binary
+*.SLDPRT binary
+*.SLDASM binary
+*.SLDDRW binary
+*.pdf    binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.xlsx   binary
+*.xls    binary
+*.docx   binary
+*.pptx   binary
+*.mp4    binary

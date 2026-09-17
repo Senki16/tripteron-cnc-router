@@ -1,0 +1,364 @@
+{
+  "kinematics": [
+    {
+      "case": "Case 1 - straight cut at constant speed",
+      "duration_s": 12.0,
+      "newton_iterations_max": 3,
+      "constraint_residual_max": 1.3907250962037405e-11,
+      "error_vs_closed_form_mm": 2.631228568361621e-14,
+      "finite_difference_velocity_error": 8.233356076775555e-09,
+      "finite_difference_acceleration_error": 1.1142910371535544e-09,
+      "stroke_min_mm": [
+        40.0,
+        100.0,
+        100.0
+      ],
+      "stroke_max_mm": [
+        160.0,
+        100.0,
+        100.0
+      ],
+      "speed_max_mm_s": [
+        10.0,
+        0.0,
+        0.0
+      ],
+      "accel_max_mm_s2": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "case": "Case 2 - accelerated rapid move along Y",
+      "duration_s": 4.0,
+      "newton_iterations_max": 3,
+      "constraint_residual_max": 7.691919664208182e-11,
+      "error_vs_closed_form_mm": 2.0539125955565396e-13,
+      "finite_difference_velocity_error": 0.09999999999990905,
+      "finite_difference_acceleration_error": 20.0,
+      "stroke_min_mm": [
+        100.0,
+        60.0,
+        100.0
+      ],
+      "stroke_max_mm": [
+        100.0,
+        140.0,
+        100.0
+      ],
+      "speed_max_mm_s": [
+        0.0,
+        40.0,
+        0.0
+      ],
+      "accel_max_mm_s2": [
+        0.0,
+        20.0,
+        0.0
+      ]
+    },
+    {
+      "case": "Case 3 - helical pocket",
+      "duration_s": 37.69911184307752,
+      "newton_iterations_max": 4,
+      "constraint_residual_max": 1.2941829368235591e-13,
+      "error_vs_closed_form_mm": 1.4210854715202004e-14,
+      "finite_difference_velocity_error": 0.0004112284434452107,
+      "finite_difference_acceleration_error": 6.853807390139188e-05,
+      "stroke_min_mm": [
+        39.99999999999999,
+        40.0,
+        62.30088815692248
+      ],
+      "stroke_max_mm": [
+        160.0,
+        160.0,
+        100.0
+      ],
+      "speed_max_mm_s": [
+        10.0,
+        10.0,
+        1.0
+      ],
+      "accel_max_mm_s2": [
+        1.6666666666666665,
+        1.6666666666666665,
+        0.0
+      ]
+    }
+  ],
+  "workspace": {
+    "bounds_mm": {
+      "x": [
+        -100.0,
+        100.0
+      ],
+      "y": [
+        -100.0,
+        100.0
+      ],
+      "z": [
+        -100.0,
+        100.0
+      ]
+    },
+    "volume_dm3": 8.615125,
+    "samples": 68921
+  },
+  "statics": {
+    "poses": [
+      {
+        "pose": "home (0, 0, 0)",
+        "Fx_actuator_N": -80.91187279146217,
+        "Fy_actuator_N": -80.91187279146217,
+        "Fz_actuator_N": 157.8862200070369,
+        "worst_link": "link_C3",
+        "worst_link_moment_Nmm": 33183.89280000643,
+        "worst_link_bending_MPa": 25.377191859047254,
+        "equilibrium_residual_N": 1.5373724215683204e-09
+      },
+      {
+        "pose": "corner (+90, +90, +90)",
+        "Fx_actuator_N": -81.38556989308418,
+        "Fy_actuator_N": -81.38556989308418,
+        "Fz_actuator_N": 156.28231558782122,
+        "worst_link": "link_C3",
+        "worst_link_moment_Nmm": 32798.955740052115,
+        "worst_link_bending_MPa": 25.082813448322746,
+        "equilibrium_residual_N": 2.6480167347216138e-09
+      },
+      {
+        "pose": "corner (-90, -90, -90)",
+        "Fx_actuator_N": -79.3861787672515,
+        "Fy_actuator_N": -79.3861787672515,
+        "Fz_actuator_N": 161.99261990446428,
+        "worst_link": "link_C3",
+        "worst_link_moment_Nmm": 34169.4287759623,
+        "worst_link_bending_MPa": 26.130874849061627,
+        "equilibrium_residual_N": 1.2526519631002351e-09
+      },
+      {
+        "pose": "corner (+90, -90, +90)",
+        "Fx_actuator_N": -81.38556989308418,
+        "Fy_actuator_N": -79.3861787668026,
+        "Fz_actuator_N": 155.0310678461342,
+        "worst_link": "link_C3",
+        "worst_link_moment_Nmm": 32498.656282026786,
+        "worst_link_bending_MPa": 24.853161158659034,
+        "equilibrium_residual_N": 2.7217317502254688e-09
+      }
+    ],
+    "design_axial_load_N": 161.99261990446428,
+    "gravity_only_N": {
+      "1": -0.9118727888064485,
+      "2": -0.9118727888064485,
+      "3": 37.886220003053275
+    },
+    "equations": 60,
+    "unknowns": 63,
+    "rank": 60,
+    "redundant_constraints": 3,
+    "arm_section": {
+      "area_mm2": 184.0,
+      "I_mm4": 16345.333333333334,
+      "c_mm": 12.5,
+      "W_mm3": 1307.6266666666668
+    }
+  },
+  "power_screw": {
+    "design load from the static analysis": {
+      "torque": {
+        "load_N": 161.99261990446428,
+        "lead_mm": 8.0,
+        "dm_mm": 7.0,
+        "dr_mm": 6.0,
+        "lead_angle_deg": 19.990512792909144,
+        "T_raise_thread_Nmm": 311.92289118881627,
+        "T_lower_thread_Nmm": -111.88834727804651,
+        "T_collar_Nmm": 9.719557194267857,
+        "T_raise_Nmm": 321.6424483830841,
+        "T_lower_Nmm": -102.16879008377865,
+        "efficiency": 0.641256807534188,
+        "mu_required_for_self_locking": 0.3513871312320655,
+        "self_locking": false,
+        "motor_torque_ratio": 0.07147609964068535
+      },
+      "stresses": {
+        "area_mm2": 28.274333882308138,
+        "sigma_axial_MPa": 5.729316933822677,
+        "tau_torsion_MPa": 7.58384971382928,
+        "tau_thread_MPa": 3.7692874564622874,
+        "sigma_bearing_MPa": 1.2277107715334306,
+        "sigma_vonMises_MPa": 14.330715333647259,
+        "safety_factor_yield": 25.818669297775564
+      },
+      "buckling": {
+        "I_mm4": 63.61725123519331,
+        "area_mm2": 28.274333882308138,
+        "radius_gyration_mm": 1.5,
+        "slenderness": 333.3333333333333,
+        "slenderness_limit": 105.08704528448932,
+        "P_euler_N": 519.882241098587,
+        "P_johnson_N": -42167.2687081848,
+        "P_critical_N": 519.882241098587,
+        "safety_factor": 3.209295839558551,
+        "column_regime": "Euler"
+      }
+    },
+    "load used in delivery 3": {
+      "torque": {
+        "load_N": 151.9,
+        "lead_mm": 8.0,
+        "dm_mm": 7.0,
+        "dr_mm": 6.0,
+        "lead_angle_deg": 19.990512792909144,
+        "T_raise_thread_Nmm": 292.48917141734205,
+        "T_lower_thread_Nmm": -104.91737192446558,
+        "T_collar_Nmm": 9.114,
+        "T_raise_Nmm": 301.603171417342,
+        "T_lower_Nmm": -95.80337192446558,
+        "efficiency": 0.6412568075341881,
+        "mu_required_for_self_locking": 0.3513871312320655,
+        "self_locking": false,
+        "motor_torque_ratio": 0.06702292698163156
+      },
+      "stresses": {
+        "area_mm2": 28.274333882308138,
+        "sigma_axial_MPa": 5.372363523479756,
+        "tau_torsion_MPa": 7.111353419742552,
+        "tau_thread_MPa": 3.5344496864998396,
+        "sigma_bearing_MPa": 1.1512207550313762,
+        "sigma_vonMises_MPa": 13.437869332965999,
+        "safety_factor_yield": 27.534126938733507
+      },
+      "buckling": {
+        "I_mm4": 63.61725123519331,
+        "area_mm2": 28.274333882308138,
+        "radius_gyration_mm": 1.5,
+        "slenderness": 333.3333333333333,
+        "slenderness_limit": 105.08704528448932,
+        "P_euler_N": 519.882241098587,
+        "P_johnson_N": -42167.2687081848,
+        "P_critical_N": 519.882241098587,
+        "safety_factor": 3.422529566152646,
+        "column_regime": "Euler"
+      }
+    }
+  },
+  "fea": {
+    "rows": [
+      {
+        "quantity": "Bending stress (MPa)",
+        "samples": 19,
+        "minimum": -9.36,
+        "maximum": -0.574,
+        "mean": -3.212,
+        "abs_max": 9.36
+      },
+      {
+        "quantity": "Axial stress (MPa)",
+        "samples": 33,
+        "minimum": -0.305,
+        "maximum": 0.00286,
+        "mean": -0.09252242424242427,
+        "abs_max": 0.305
+      },
+      {
+        "quantity": "Shear stress dir. 1 (MPa)",
+        "samples": 40,
+        "minimum": -0.987,
+        "maximum": 2.69,
+        "mean": 0.1878355,
+        "abs_max": 2.69
+      },
+      {
+        "quantity": "Shear stress dir. 2 (MPa)",
+        "samples": 31,
+        "minimum": -0.219,
+        "maximum": 0.627,
+        "mean": 0.07135548387096777,
+        "abs_max": 0.627
+      },
+      {
+        "quantity": "Strain (-)",
+        "samples": 23,
+        "minimum": -6.43e-06,
+        "maximum": 2.866e-06,
+        "mean": -2.8171411739130434e-07,
+        "abs_max": 6.43e-06
+      },
+      {
+        "quantity": "Displacement (mm)",
+        "samples": 22,
+        "minimum": 1e-30,
+        "maximum": 0.1016,
+        "mean": 0.029171045454545453,
+        "abs_max": 0.1016
+      },
+      {
+        "quantity": "Buckling mode 1, X (mm)",
+        "samples": 27,
+        "minimum": 0.0,
+        "maximum": 0.0285,
+        "mean": 0.011673703703703705,
+        "abs_max": 0.0285
+      },
+      {
+        "quantity": "Buckling mode 1, Y (mm)",
+        "samples": 24,
+        "minimum": -0.00348,
+        "maximum": 0.00345,
+        "mean": 0.0004994083333333333,
+        "abs_max": 0.00348
+      },
+      {
+        "quantity": "Buckling mode 1, Z (mm)",
+        "samples": 21,
+        "minimum": -0.0213,
+        "maximum": 0.00189,
+        "mean": -0.006704619047619048,
+        "abs_max": 0.0213
+      }
+    ],
+    "safety": {
+      "worst_stress_quantity": "Bending stress (MPa)",
+      "worst_stress_MPa": 9.36,
+      "yield_strength_MPa": 620.0,
+      "static_safety_factor": 66.23931623931624,
+      "buckling_load_factor": 2237.5
+    }
+  },
+  "parameters": {
+    "link_c_mm": 240.0,
+    "link_d_mm": 240.0,
+    "stroke_mm": 200.0,
+    "cutting_force_N": [
+      80.0,
+      80.0,
+      -120.0
+    ],
+    "screw": {
+      "d_nominal": 8.0,
+      "pitch": 2.0,
+      "starts": 4,
+      "alpha_deg": 15.0,
+      "mu": 0.15,
+      "mu_c": 0.02,
+      "d_c": 6.0,
+      "length": 500.0,
+      "E": 207000.0,
+      "Sy": 370.0,
+      "nut_engaged_threads": 6,
+      "nut_w": 0.38,
+      "lead": 8.0,
+      "dm": 7.0,
+      "dr": 6.0,
+      "lambda_deg": 19.990512792909144
+    },
+    "motor": {
+      "name": "NEMA 34 86HB250 closed loop",
+      "holding_torque": 4.5
+    }
+  }
+}
