@@ -5,13 +5,15 @@ translational parallel machine (Tripteron) used as a CNC router.
 
 **IM0240 Machine Design I — Universidad EAFIT, Mechanical Engineering**
 
-**Authors:** David Amell Osorio · Germán Gabriel Riaño Barrera · David Zuluaga Henao
+**Group 2:** David Amell Osorio · Ronny Antonio Bueno · Juan José García · Germán Gabriel Riaño Barrera · Sebastián Rincón Martínez · Juan Manuel Rodríguez Duque · David Zuluaga Henao
 **Course lecturer:** Juan Andrés Gallego Sánchez
+**Delivered:** 11 February 2024 (proposal) · 3 March 2024 (drawings) · 25 May 2024 (calculations)
 
 <p align="center">
-  <img src="docs/images/machine.png" width="330" alt="Tripteron CNC router concept">
-  <img src="docs/images/workspace.png" width="430" alt="Reachable workspace">
+  <img src="docs/images/machine_mechanism.png" width="430" alt="Tripteron mechanism: three PRRR legs on the work table">
+  <img src="docs/images/machine_with_chassis.png" width="380" alt="Complete machine inside the welded chassis">
 </p>
+<p align="center"><em>The 3-PRRR mechanism on the work table, and the complete machine inside its welded frame.</em></p>
 
 ---
 
@@ -43,6 +45,9 @@ transformation. Both properties are proved numerically in the calculation report
 <p align="center">
   <img src="docs/images/actuator_forces.png" width="760" alt="Actuator forces across the workspace">
 </p>
+<p align="center">
+  <img src="docs/images/guides.png" width="860" alt="Linear guide verification">
+</p>
 
 
 | Verification | Result | Margin |
@@ -55,6 +60,8 @@ transformation. Both properties are proved numerically in the calculation report
 | Screw efficiency | 64.1 % | not self-locking → brake required on Z |
 | Chassis FEA, stress | 9.36 MPa | SF 66 |
 | Chassis FEA, deflection | 0.102 mm | the limiting number for accuracy |
+| Guide bushings | 289 N on the worst bushing | **SF 1.87 — the tightest margin in the machine** |
+| Guide rods | 8.7 MPa, 0.154 mm deflection | SF 40; more compliant than the whole frame |
 | Chassis FEA, buckling | load factor 2238 | irrelevant at this load |
 
 ## Repository layout
@@ -71,7 +78,7 @@ transformation. Both properties are proved numerically in the calculation report
 05_CAD/
     Source_Models/                 SolidWorks parts, assemblies and drawings, by group
     Archives/                      large .zip/.rar exports (kept locally, not versioned)
-06_Original_Submission_ES/         The original Spanish submission, kept for traceability
+06_Original_Submission_ES/         The original Spanish submission (kept locally, not versioned)
 07_Reference/                      Motor datasheets, component dimensions, course material
 08_Media/                          Video of the machine running
 docs/images/                       Images used by this README
@@ -99,6 +106,7 @@ writes:
 | `tripteron/kinematics.py` | Loop-closure constraints, Jacobian, J̇, Newton–Raphson solver, closed-form inverse kinematics, trajectories, workspace |
 | `tripteron/statics.py` | 60×63 rigid-body equilibrium system, minimum-norm solution, virtual-work actuator forces, arm stresses |
 | `tripteron/power_screw.py` | Torque, efficiency, self-locking, stresses, Euler/Johnson column check |
+| `tripteron/guides.py` | Bushing loads, rod stress and deflection of the carriages, sensitivity to the bushing spacing |
 | `tripteron/fea_postprocess.py` | Post-processing of the SolidWorks Simulation exports |
 | `run_all.py` | Runs the four studies and writes results and figures |
 
@@ -113,28 +121,54 @@ discrepancy:
 | Velocity, acceleration | Analytical J, J̇ | Finite differences of the position solution |
 | Actuator forces | 60×63 rigid-body equilibrium | Principle of virtual work |
 | Screw | Shigley closed-form expressions | Physical bounds (e ≤ 1, σ < Sy) |
+| Guides | Prismatic-joint reactions of the static analysis | Free-body couple check on the carriage |
 | Chassis | Finite elements | Order-of-magnitude hand check |
 
 ## Corrections in this edition
 
 The calculation report is a **full recomputation**, not a transcription. The errors found
 in the original memo are listed one by one in Appendix A of the report, with the reason
-each is wrong and the value that replaces it. The two that changed the design:
+each is wrong and the value that replaces it. The three that changed the design:
 
-- The cutting force had been applied **upwards**; downwards it raises the design load from
+- **The linear guides had never been verified.** The sheet titled *Guías par R* repeats
+  the lead-screw calculation instead of checking the guides. Sheet 4 does it properly, and
+  the guides turn out to hold the tightest margin in the machine (SF 1.87). The load is
+  almost entirely the moment the arms apply to the carriage, so the fix is to move the two
+  bushings further apart — 60 → 100 mm takes the safety factor from 1.87 to 3.12 at no
+  cost in material.
+- **The cutting force had been applied upwards**; downwards it raises the design load from
   85 N to 162 N, and the buckling safety factor of the screw falls from ≈6 to 3.21. The
   column check — not the stress check — now governs the transmission.
-- The vertical axis is **not self-locking** (a 4-start screw has a 19.99° lead angle and
+- **The vertical axis is not self-locking** (a 4-start screw has a 19.99° lead angle and
   would need µ ≥ 0.351 against the actual 0.15). A brake or a permanently energised motor
   is mandatory on Z. This is a safety requirement the original memo did not identify.
 
+The original memo also contains two separate sheets for the same lead screw that disagree
+with each other on every line — same formulas, different arithmetic (efficiency 0.62 vs
+1.95, thread shear 0.20 vs 2380 MPa, critical load 93 vs 9429 N). Appendix A tabulates
+them side by side.
+
 ## Note on the CAD archives
 
-`05_CAD/Source_Models/` carries the SolidWorks parts, assemblies and drawings. The large
-`.zip` / `.rar` exports of the same models are kept locally but excluded from version
-control by `.gitignore`, together with the build products of LaTeX and the video of the
-running machine.
+`05_CAD/Source_Models/` and `05_CAD/Final_CAD/` carry the SolidWorks parts, assemblies and
+drawings. Excluded from version control by `.gitignore`, but present in the working copy:
+the large `.zip` / `.rar` exports of the same models, the folder
+`06_Original_Submission_ES/` with the original Spanish submission, the LaTeX build
+products and the video of the running machine.
+
+## Who did what
+
+| Member | Contribution |
+|---|---|
+| David Amell Osorio | Tool support, final assembly drawings, kinematic analysis |
+| Ronny Antonio Bueno | Arms and R-pair system, guide calculations |
+| Juan José García | Electrical system and wiring, lead-screw calculations |
+| Germán Gabriel Riaño Barrera | Chassis and guide system drawings, lead-screw and guide calculations |
+| Sebastián Rincón Martínez | Static analysis |
+| Juan Manuel Rodríguez Duque | Guide system drawings, static analysis |
+| David Zuluaga Henao | Kinematics, chassis FEA, spacers |
 
 ## License
 
-Academic work produced for IM0240 at Universidad EAFIT. Shared for reference.
+Academic work produced for IM0240 at Universidad EAFIT, first semester 2024.
+Shared for reference.

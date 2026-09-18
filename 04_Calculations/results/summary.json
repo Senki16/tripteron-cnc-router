@@ -246,6 +246,128 @@
       }
     }
   },
+  "guides": {
+    "geometry": {
+      "rod_diameter": 12.0,
+      "rod_span": 500.0,
+      "bushing_spacing": 60.0,
+      "rod_spacing": 115.0,
+      "n_rods": 2,
+      "n_bushings": 4,
+      "E": 207000.0,
+      "Sy": 350.0,
+      "bushing_C0": 540.0,
+      "bushing_C": 390.0,
+      "d_mm": 12.0,
+      "I_mm4": 1017.8760197630929,
+      "W_mm3": 169.64600329384882,
+      "area_mm2": 113.09733552923255
+    },
+    "poses": {
+      "home (0, 0, 0)": {
+        "worst_leg": 3,
+        "worst_bushing_load_N": 188.49627387271755,
+        "worst_bushing_static_sf": 2.8647781142063105,
+        "worst_rod_deflection_mm": 0.14088101786561633,
+        "worst_rod_bending_MPa": 8.398762761076583
+      },
+      "corner (+90, +90, +90)": {
+        "worst_leg": 3,
+        "worst_bushing_load_N": 288.6338977255577,
+        "worst_bushing_static_sf": 1.870882125263919,
+        "worst_rod_deflection_mm": 0.14597550842097096,
+        "worst_rod_bending_MPa": 8.702475910024605
+      },
+      "corner (-90, -90, -90)": {
+        "worst_leg": 3,
+        "worst_bushing_load_N": 143.1702245108925,
+        "worst_bushing_static_sf": 3.7717339750271637,
+        "worst_rod_deflection_mm": 0.12813609035932932,
+        "worst_rod_bending_MPa": 7.6389611628617775
+      },
+      "corner (+90, -90, +90)": {
+        "worst_leg": 3,
+        "worst_bushing_load_N": 282.8483419863627,
+        "worst_bushing_static_sf": 1.909150310755704,
+        "worst_rod_deflection_mm": 0.1535034858697051,
+        "worst_rod_bending_MPa": 9.15126381360834
+      }
+    },
+    "worst_pose": "corner (+90, +90, +90)",
+    "worst_bushing_load_N": 288.6338977255577,
+    "worst_bushing_static_sf": 1.870882125263919,
+    "worst_rod_deflection_mm": 0.14597550842097096,
+    "worst_rod_bending_MPa": 8.702475910024605,
+    "rod_bending_sf": 40.21843939801385,
+    "sensitivity": [
+      {
+        "bushing_spacing_mm": 40.0,
+        "bushing_load_N": 432.95084658832684,
+        "static_sf": 1.2472547501759739
+      },
+      {
+        "bushing_spacing_mm": 60.0,
+        "bushing_load_N": 288.6338977255577,
+        "static_sf": 1.870882125263919
+      },
+      {
+        "bushing_spacing_mm": 80.0,
+        "bushing_load_N": 216.47542329417314,
+        "static_sf": 2.494509500351836
+      },
+      {
+        "bushing_spacing_mm": 100.0,
+        "bushing_load_N": 173.1803386353424,
+        "static_sf": 3.118136875439725
+      },
+      {
+        "bushing_spacing_mm": 120.0,
+        "bushing_load_N": 144.31694886278856,
+        "static_sf": 3.741764250527586
+      }
+    ],
+    "legs": [
+      {
+        "leg": 1,
+        "actuator_force_N": -81.3855698902187,
+        "transverse_force_N": 23.62144411022362,
+        "roll_moment_Nmm": 4.7517892398651895e-12,
+        "pitch_moment_Nmm": 24442.528845605546,
+        "bushing_load_N": 209.59310140760215,
+        "bushing_static_sf": 2.5764206759355375,
+        "rod_load_N": 11.810722055111851,
+        "rod_deflection_mm": 0.14597550842021034,
+        "rod_bending_MPa": 8.70247590997926,
+        "rod_bending_sf": 40.21843939822341
+      },
+      {
+        "leg": 2,
+        "actuator_force_N": -81.38556989001836,
+        "transverse_force_N": 23.621444110346726,
+        "roll_moment_Nmm": 3.289812866569264e-12,
+        "pitch_moment_Nmm": 14059.259840413026,
+        "bushing_load_N": 123.06585969769525,
+        "bushing_static_sf": 4.387894427638026,
+        "rod_load_N": 11.810722055173391,
+        "rod_deflection_mm": 0.14597550842097096,
+        "rod_bending_MPa": 8.702475910024605,
+        "rod_bending_sf": 40.21843939801385
+      },
+      {
+        "leg": 3,
+        "actuator_force_N": 156.2823155836013,
+        "transverse_force_N": 7.700284037575004e-11,
+        "roll_moment_Nmm": 3.456079866737127e-11,
+        "pitch_moment_Nmm": 34636.0677270646,
+        "bushing_load_N": 288.6338977255577,
+        "bushing_static_sf": 1.870882125263919,
+        "rod_load_N": 3.880194887193912e-11,
+        "rod_deflection_mm": 4.795756083197979e-13,
+        "rod_bending_MPa": 2.859037946559307e-11,
+        "rod_bending_sf": 12241880189845.172
+      }
+    ]
+  },
   "fea": {
     "rows": [
       {

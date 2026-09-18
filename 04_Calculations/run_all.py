@@ -75,6 +75,7 @@ import pandas as pd                                   # noqa: E402
 
 sys.path.insert(0, str(HERE))
 from tripteron import fea_postprocess as FEA          # noqa: E402
+from tripteron import guides as GU                    # noqa: E402
 from tripteron import kinematics as K                 # noqa: E402
 from tripteron import parameters as P                 # noqa: E402
 from tripteron import power_screw as PS               # noqa: E402
@@ -261,6 +262,91 @@ def power_screw_study(design_load: float) -> dict:
     return out
 
 
+def guides_study() -> dict:
+    """Linear guides and bushings of the three carriages (sheet 4)."""
+    poses = {
+        "home (0, 0, 0)": np.zeros(3),
+        "corner (+90, +90, +90)": np.array([90.0, 90.0, 90.0]),
+        "corner (-90, -90, -90)": np.array([-90.0, -90.0, -90.0]),
+        "corner (+90, -90, +90)": np.array([90.0, -90.0, 90.0]),
+    }
+    rows, reports = [], {}
+    for name, b in poses.items():
+        q = K.inverse_kinematics(b)
+        full = ST.solve(q, P.F_CUT)
+        rep = GU.report(full["reactions"])
+        reports[name] = rep
+        for leg in rep["legs"]:
+            rows.append(dict(pose=name, **leg))
+    df = pd.DataFrame(rows)
+    df.to_csv(RESULTS / "guides.csv", index=False)
+
+    worst_pose = max(reports, key=lambda k: reports[k]["worst_bushing_load_N"])
+    worst = reports[worst_pose]
+    sens = pd.DataFrame(worst["sensitivity"])
+    sens.to_csv(RESULTS / "guides_spacing_sensitivity.csv", index=False)
+
+    fig, ax = plt.subplots(1, 3, figsize=(10.6, 3.4))
+
+    # (a) bushing load per carriage and pose
+    labels = ["home", "(+90,+90,+90)", "(-90,-90,-90)", "(+90,-90,+90)"]
+    width = 0.26
+    x = np.arange(len(poses))
+    for k, (leg, color) in enumerate(zip((1, 2, 3), (BLUE, ORANGE, GREEN))):
+        vals = [reports[p]["legs"][k]["bushing_load_N"] for p in poses]
+        ax[0].bar(x + (k - 1) * width, vals, width, color=color, label=f"carriage {leg} ({'XYZ'[k]})")
+    ax[0].axhline(GU.GUIDE["bushing_C0"], color=INK, ls="--", lw=1.2)
+    ax[0].text(-0.45, GU.GUIDE["bushing_C0"] * 1.03, "static rating C₀", ha="left", fontsize=8)
+    ax[0].set_xticks(x); ax[0].set_xticklabels(labels, fontsize=7.5, rotation=18, ha="right")
+    ax[0].set_ylim(0, GU.GUIDE["bushing_C0"] * 1.22)
+    ax[0].set_ylabel("worst bushing load [N]")
+    ax[0].set_title("(a) load on the most loaded bushing")
+    ax[0].legend(fontsize=7.5, ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.0), columnspacing=0.8, handlelength=1.1)
+
+    # (b) where the load comes from, worst pose
+    comp = ["transverse\nforce", "pitch / yaw\nmoment", "roll\nmoment"]
+    legw = worst["legs"][worst["worst_leg"] - 1]
+    g = GU.GUIDE
+    parts = [legw["transverse_force_N"] / g["n_bushings"],
+             legw["pitch_moment_Nmm"] / g["bushing_spacing"] / 2.0,
+             legw["roll_moment_Nmm"] / g["rod_spacing"] / 2.0]
+    ax[1].bar(comp, parts, color=[GREEN, BLUE, ORANGE])
+    for i, v in enumerate(parts):
+        ax[1].text(i, v + 6, f"{v:.0f} N", ha="center", fontsize=8)
+    ax[1].set_ylabel("contribution [N]")
+    ax[1].set_title(f"(b) breakdown, carriage {worst['worst_leg']}")
+
+    # (c) sensitivity to the bushing spacing
+    ax[2].plot(sens["bushing_spacing_mm"], sens["bushing_load_N"], color=BLUE, lw=2, marker="o", ms=4)
+    ax[2].axhline(g["bushing_C0"], color=INK, ls="--", lw=1.2)
+    ax[2].axvline(g["bushing_spacing"], color=ORANGE, ls=":", lw=1.4)
+    ax[2].text(g["bushing_spacing"] + 2, sens["bushing_load_N"].max() * 0.92, "as built", color=ORANGE, fontsize=8)
+    ax[2].set_xlabel("bushing spacing b [mm]")
+    ax[2].set_ylabel("worst bushing load [N]")
+    ax[2].set_title("(c) sensitivity to the bushing spacing")
+
+    fig.tight_layout()
+    fig.savefig(FIGURES / "guides.png", bbox_inches="tight")
+    plt.close(fig)
+
+    return dict(
+        geometry=dict(GU.GUIDE, **GU.section()),
+        poses={k: dict(worst_leg=v["worst_leg"],
+                       worst_bushing_load_N=v["worst_bushing_load_N"],
+                       worst_bushing_static_sf=v["worst_bushing_static_sf"],
+                       worst_rod_deflection_mm=v["worst_rod_deflection_mm"],
+                       worst_rod_bending_MPa=v["worst_rod_bending_MPa"]) for k, v in reports.items()},
+        worst_pose=worst_pose,
+        worst_bushing_load_N=worst["worst_bushing_load_N"],
+        worst_bushing_static_sf=worst["worst_bushing_static_sf"],
+        worst_rod_deflection_mm=worst["worst_rod_deflection_mm"],
+        worst_rod_bending_MPa=worst["worst_rod_bending_MPa"],
+        rod_bending_sf=GU.GUIDE["Sy"] / worst["worst_rod_bending_MPa"],
+        sensitivity=worst["sensitivity"],
+        legs=worst["legs"],
+    )
+
+
 def fea_study() -> dict:
     rows = FEA.summary()
     pd.DataFrame(rows).to_csv(RESULTS / "fea_summary.csv", index=False)
@@ -297,10 +383,11 @@ def main() -> None:
     ws = workspace_figure()
     st = statics_study()
     ps = power_screw_study(st["design_axial_load_N"])
+    gu = guides_study()
     fea = fea_study()
 
     summary = dict(kinematics=kin, workspace=ws, statics=st,
-                   power_screw={k: v for k, v in ps.items()}, fea=fea,
+                   power_screw={k: v for k, v in ps.items()}, guides=gu, fea=fea,
                    parameters=dict(link_c_mm=P.LINK_C, link_d_mm=P.LINK_D, stroke_mm=P.STROKE,
                                    cutting_force_N=list(P.F_CUT), screw=PS.geometry(),
                                    motor=P.MOTOR))

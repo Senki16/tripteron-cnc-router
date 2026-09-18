@@ -37,9 +37,9 @@
 %------------------------------------------------------- header meta-information
 \def\proyecto{Tripteron -- 3-PRRR machining table}
 \def\calculo{ }
-\def\nombre{D. Amell / G. Ria\~no / D. Zuluaga}
+\def\nombre{Group 2}
 \def\revisor{Juan Andr\'es Gallego S\'anchez}
-\def\fecha{September 2026}
+\def\fecha{25 / 05 / 2024}
 
 \fancyhead[L]{\small\begin{tabular}{| l l | l l |}
 \hline
@@ -49,8 +49,8 @@
 \hline
 \end{tabular}}
 
-% one command to open a new calculation sheet
-\newcommand{\sheet}[1]{\clearpage\def\calculo{#1}}
+% one command to open a new calculation sheet: #1 title, #2 analyst
+\newcommand{\sheet}[2]{\clearpage\def\calculo{#1}\def\nombre{#2}}
 
 \begin{document}
 
@@ -72,51 +72,64 @@
 \rule{\textwidth}{1.2pt}\\[1.8cm]
 
 \begin{tabular}{c}
-{\large\bfseries Authors}\\[6pt]
+{\large\bfseries Group 2}\\[8pt]
 {\large David Amell Osorio}\\[3pt]
+{\large Ronny Antonio Bueno}\\[3pt]
+{\large Juan Jos\'e Garc\'ia}\\[3pt]
 {\large Germ\'an Gabriel Ria\~no Barrera}\\[3pt]
-{\large David Zuluaga Henao}\\[1.2cm]
+{\large Sebasti\'an Rinc\'on Mart\'inez}\\[3pt]
+{\large Juan Manuel Rodr\'iguez Duque}\\[3pt]
+{\large David Zuluaga Henao}\\[1.0cm]
 {\large\bfseries Reviewer}\\[6pt]
-{\large Juan Andr\'es Gallego S\'anchez}\\[1.6cm]
+{\large Juan Andr\'es Gallego S\'anchez}\\[1.2cm]
 \end{tabular}
 
 \vfill
-{\large Medell\'in, Colombia -- September 2026}
+{\large Medell\'in, Colombia -- 25 May 2024}
 \end{center}
 
 %==============================================================================
 \clearpage
 \setcounter{page}{1}
 \def\calculo{Contents and scope}
+\def\nombre{Group 2}
 
 \section{Scope of this document}\label{sec:scope}
 
 This report contains the complete engineering verification of the \textbf{Tripteron}, a
 three-degree-of-freedom translational parallel machine built with three identical
 PRRR legs. The machine carries a milling spindle over a \SI{200}{\milli\metre} cubic
-workspace and is driven by three orthogonal lead-screw axes.
+workspace and is driven by three orthogonal lead-screw axes running on linear guides.
 
 Every number presented here was \textbf{recomputed from first principles} with a
 purpose-written Python package (\texttt{04\_Calculations/}). No result was copied from
 the previous version of the calculation memo: each quantity is produced by executable
 code, cross-checked by at least two independent methods, and reported together with the
 numerical residual of the check. Appendix A lists, one by one, the
-errors found in the earlier memo and the value that replaces each of them.
+errors found in the earlier memo and the value that replaces each of them --- including
+the one that mattered most: the sheet that should have verified the linear guides verified
+the lead screw a second time instead, so the most heavily loaded component of the machine
+had never been checked.
 
 \subsection{Calculation sheets}
 
 \begin{center}
-\begin{tabular}{@{}cl>{\raggedright\arraybackslash}p{8.4cm}@{}}
+\small
+\begin{tabular}{@{}cl>{\raggedright\arraybackslash}p{5.7cm}l@{}}
 \toprule
-\textbf{Sheet} & \textbf{Title} & \textbf{Purpose} \\
+\textbf{Sheet} & \textbf{Title} & \textbf{Purpose} & \textbf{Analyst} \\
 \midrule
-1 & Kinematic analysis & Loop-closure model; position, velocity and acceleration of the three legs; workspace. \\
-2 & Static analysis    & Actuator forces and internal link loads under the cutting force and self weight. \\
-3 & Lead-screw drive   & Driving torque, efficiency, self-locking, screw stresses and column buckling. \\
-4 & Chassis FEA        & Finite-element verification of the welded frame: stress, deflection and buckling. \\
+1 & Kinematic analysis & Loop-closure model; position, velocity and acceleration of the three legs; workspace. & D. Amell / D. Zuluaga \\
+2 & Static analysis    & Actuator forces and internal link loads under the cutting force and self weight. & J. M. Rodr\'iguez / S. Rinc\'on \\
+3 & Lead-screw drive   & Driving torque, efficiency, self-locking, screw stresses and column buckling. & J. J. Garc\'ia / D. Zuluaga / G. Ria\~no \\
+4 & R-pair guides      & Bushing loads, rod stress and deflection of the three carriages. & R. Bueno / G. Ria\~no / D. Zuluaga \\
+5 & Chassis FEA        & Finite-element verification of the welded frame: stress, deflection and buckling. & D. Zuluaga \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+The authorship of every sheet is the one of the original submission, so that this
+corrected edition can be read side by side with it.
 
 \subsection{Reference frame and nomenclature}
 
@@ -169,7 +182,7 @@ Motor                             & NEMA 34 86HB250 closed loop, \SI{4.5}{\newto
 \end{center}
 
 %==============================================================================
-\sheet{Sheet 1 -- Kinematic analysis}
+\sheet{Sheet 1 -- Kinematic analysis}{D. Amell / D. Zuluaga}
 %==============================================================================
 \section{Description}\label{sec:kin-desc}
 
@@ -405,7 +418,7 @@ platform of comparable size.
 \FloatBarrier
 
 %==============================================================================
-\sheet{Sheet 2 -- Static analysis}
+\sheet{Sheet 2 -- Static analysis}{J. M. Rodr\'iguez / S. Rinc\'on}
 %==============================================================================
 \section{Description}\label{sec:sta-desc}
 
@@ -571,7 +584,7 @@ $(-90,-90,-90)$, on the vertical axis. This value is carried forward to Sheet~3.
 \FloatBarrier
 
 %==============================================================================
-\sheet{Sheet 3 -- Lead-screw drive}
+\sheet{Sheet 3 -- Lead-screw drive}{J. J. Garc\'ia / D. Zuluaga / G. Ria\~no}
 %==============================================================================
 \section{Description}\label{sec:scr-desc}
 
@@ -652,14 +665,21 @@ the root:
 \begin{align}
 \sigma_a &= \frac{F}{A_r}
 &\tau_t &= \frac{16\,T_R}{\pi d_r^{3}} \\
-\tau_{\text{thread}} &= \frac{2F}{\pi d_r\,p\,n_t}
+\tau_{\text{thread}} &= \frac{2F}{\pi d_r\,w\,p\,n_t}
 &\sigma_{\text{bearing}} &= \frac{2F}{\pi d_m\,p\,n_t}
 \end{align}
-and the distortion-energy (von Mises) equivalent stress is
+where $w=0.38$ is the fraction of the pitch that the thread actually occupies at its root
+on a trapezoidal profile. The body of the screw is then checked with the
+distortion-energy (von Mises) criterion,
 \begin{equation}
-\sigma' = \sqrt{\sigma_a^2 + 3\bigl(\tau_t^2+\tau_{\text{thread}}^2\bigr)} ,
+\sigma' = \sqrt{\sigma_a^2 + 3\,\tau_t^2} ,
 \qquad n = \frac{S_y}{\sigma'} .
+\label{eq:vm}
 \end{equation}
+The thread shear is \emph{not} superposed in equation~\eqref{eq:vm}: it acts on the
+cylindrical surface at the root of the thread, not on the cross-section of the body, so it
+is a separate check with its own margin,
+$n_{\text{thread}} = 0.577\,S_y/\tau_{\text{thread}}$.
 
 \subsection{Column buckling}
 
@@ -707,7 +727,7 @@ Fraction of motor holding torque used        & \SI{7.1}{\percent} & \SI{6.7}{\pe
 Root area $A_r$                     & \SI{28.27}{\milli\metre\squared} & --- \\
 Axial stress $\sigma_a$             & \SI{5.73}{\mega\pascal}  & compression \\
 Torsional stress $\tau_t$           & \SI{7.58}{\mega\pascal}  & from $T_R$ \\
-Thread shear $\tau_{\text{thread}}$ & \SI{3.77}{\mega\pascal}  & 6 engaged threads \\
+Thread shear $\tau_{\text{thread}}$ & \SI{3.77}{\mega\pascal}  & 6 engaged threads, $n_{\text{thread}} = 56.6$ \\
 Bearing stress $\sigma_{\text{bearing}}$ & \SI{1.23}{\mega\pascal} & bronze nut, limit $\approx$ \SI{17}{\mega\pascal} \\
 von Mises $\sigma'$                 & \SI{14.33}{\mega\pascal} & $S_y=\SI{370}{\mega\pascal}$ \\
 \textbf{Static safety factor}       & \textbf{25.8}            & --- \\
@@ -761,7 +781,178 @@ Critical load $P_{cr}$              & \SI{519.9}{\newton}      & pinned--pinned 
 \end{enumerate}
 
 %==============================================================================
-\sheet{Sheet 4 -- Chassis finite element verification}
+\sheet{Sheet 4 -- R-pair guides and carriages}{R. Bueno / G. Ria\~no / D. Zuluaga}
+%==============================================================================
+\section{Description}\label{sec:gui-desc}
+
+Each axis is guided by two parallel hardened rods on which the carriage of the R
+pair slides. The nut on the lead screw takes the axial load, which Sheet~3 has already
+verified; \emph{everything else} the joint has to carry --- the two transverse force
+components and the three moment components --- goes through the rods and their linear
+bushings. Because the arms of a Tripteron reach out from the carriage, that moment is
+large, and this is the sheet that decides whether the guides can take it.
+
+\section{Objective of the calculation}\label{sec:gui-obj}
+
+\begin{enumerate}[leftmargin=*,nosep]
+  \item Obtain the load on the most loaded linear bushing of each carriage and compare it
+        with the static rating of the bushing fitted.
+  \item Obtain the bending stress and the deflection of the guide rods, and compare the
+        deflection with the deflection of the frame.
+  \item Identify which geometric parameter of the carriage governs the result.
+\end{enumerate}
+
+\section{Variables of the calculation model}\label{sec:gui-var}
+
+\begin{center}
+\begin{tabular}{@{}llc@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} \\
+\midrule
+$d$   & Guide rod diameter (12 H7 bore on the bearing support drawing) & \SI{12}{\milli\metre} \\
+$\ell$& Clear span of the rod between end supports                     & \SI{500}{\milli\metre} \\
+$b$   & Distance between the two bushings of one carriage              & \SI{60}{\milli\metre} \\
+$s$   & Track width, distance between the two rods                     & \SI{115}{\milli\metre} \\
+$I$   & Second moment of area of a rod, $\pi d^4/64$                   & \SI{1018}{\milli\metre\tothe{4}} \\
+$W$   & Section modulus of a rod, $2I/d$                               & \SI{169.6}{\milli\metre\cubed} \\
+$E$   & Young's modulus, hardened steel                                & \SI{207}{\giga\pascal} \\
+$S_y$ & Yield strength of the rod                                      & \SI{350}{\mega\pascal} \\
+$C_0$ & Static load rating of one linear bushing (LM12UU, catalogue)   & \SI{540}{\newton} \\
+$C$   & Dynamic load rating of one linear bushing                      & \SI{390}{\newton} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The rod diameter and the two spacings are read from the Delivery~2 carriage and
+bearing-support drawings; the ratings are those of a standard LM12UU bushing and must be
+replaced by the catalogue values of the type actually fitted before the result is used as
+an acceptance criterion.
+
+\section{Calculation model}\label{sec:gui-model}
+
+The load case is \emph{not} assumed: it is the prismatic-joint reaction
+$(\bm F_i,\bm M_i)$ that the static analysis of Sheet~2 already produced for every pose.
+Splitting it along the travel axis $\bm u_i$,
+\begin{equation}
+\bm F_i = \underbrace{(\bm F_i\!\cdot\!\bm u_i)\,\bm u_i}_{\text{actuator, taken by the nut}}
+        + \underbrace{\bm F_{t}}_{\text{transverse, taken by the bushings}},
+\qquad
+\bm M_i = \underbrace{(\bm M_i\!\cdot\!\bm u_i)\,\bm u_i}_{\text{roll}}
+        + \underbrace{\bm M_{\perp}}_{\text{pitch and yaw}} .
+\end{equation}
+
+Each part is then reacted by a different feature of the carriage:
+
+\begin{center}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{5.9cm}l@{}}
+\toprule
+\textbf{Load} & \textbf{Reacted by} & \textbf{Bushing load} \\
+\midrule
+Transverse force $F_t$ & the four bushings together        & $F_t/4$ \\
+Roll moment $M_{\parallel}$ & a couple between the two rods, lever arm $s$ & $M_{\parallel}/(2s)$ \\
+Pitch/yaw moment $M_{\perp}$ & a couple between the two bushings of one rod, lever arm $b$ & $M_{\perp}/(2b)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+so that the worst bushing carries
+\begin{equation}
+F_{b} = \frac{F_t}{4} + \frac{M_{\parallel}}{2s} + \frac{M_{\perp}}{2b},
+\qquad n_0 = \frac{C_0}{F_b}.
+\label{eq:bushing}
+\end{equation}
+Superposing the three contributions on the same bushing is conservative: they reach their
+maxima at slightly different poses.
+
+The rod itself is treated as a simply supported beam of span $\ell$ with the carriage at
+mid span, which is the worst position:
+\begin{equation}
+F_{r} = \frac{F_t}{2} + \frac{M_{\parallel}}{s},
+\qquad
+\delta = \frac{F_r\,\ell^{3}}{48EI},
+\qquad
+\sigma_b = \frac{F_r\,\ell}{4W}.
+\end{equation}
+
+\section{Results}\label{sec:gui-res}
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Pose} & \textbf{Worst carriage} & $F_b$ [N] & $n_0=C_0/F_b$ & $\delta$ [mm] \\
+\midrule
+Home $(0,0,0)$         & 3 ($z$) & 188.5 & 2.86 & 0.141 \\
+Corner $(+90,+90,+90)$ & 3 ($z$) & \textbf{288.6} & \textbf{1.87} & 0.146 \\
+Corner $(-90,-90,-90)$ & 3 ($z$) & 143.2 & 3.77 & 0.128 \\
+Corner $(+90,-90,+90)$ & 3 ($z$) & 282.8 & 1.91 & 0.154 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Worst pose, per carriage} & \textbf{Carriage 1 ($x$)} & \textbf{Carriage 2 ($y$)} & \textbf{Carriage 3 ($z$)} \\
+\midrule
+Transverse force $F_t$ [N]        & 23.6 & 23.6 & 0.0 \\
+Pitch/yaw moment $M_{\perp}$ [N$\cdot$mm] & \num{24443} & \num{14059} & \num{34636} \\
+Roll moment $M_{\parallel}$ [N$\cdot$mm]  & 0 & 0 & 0 \\
+Worst bushing load $F_b$ [N]      & 209.6 & 123.1 & \textbf{288.6} \\
+Rod deflection $\delta$ [mm]      & 0.146 & 0.146 & 0 \\
+Rod bending stress $\sigma_b$ [MPa] & 8.7 & 8.7 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Bushing spacing $b$ [mm] & 40 & \textbf{60 (as built)} & 80 & 100 & 120 \\
+\midrule
+Worst bushing load [N]   & 433.0 & \textbf{288.6} & 216.5 & 173.2 & 144.3 \\
+Static safety factor     & 1.25  & \textbf{1.87}  & 2.49  & 3.12  & 3.74 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth]{figures/guides.png}
+\caption{Guide verification: load on the most loaded bushing of each carriage, where that
+load comes from, and how it depends on the bushing spacing.}
+\end{figure}
+\FloatBarrier
+
+\section{Conclusions}\label{sec:gui-conc}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{The guides carry the tightest margin in the whole machine.} With a static
+        safety factor of \textbf{1.87} against the rating of an LM12UU bushing, the
+        guides are more critical than the buckling of the lead screw (3.21), than the arms
+        (9.6), than the screw body (25.8) and than the frame (66). Any review of this
+        design should start here, not at the screw.
+  \item \textbf{The load is almost entirely a moment, not a force.} On the vertical
+        carriage the transverse force is zero and the whole \SI{289}{\newton} comes from
+        the \SI{34.6}{\newton\metre} pitch moment that the two arms apply to the carriage.
+        This is the structural signature of a Tripteron: the arms reach out from the
+        carriage, so what the guide has to resist is the lever, not the cut.
+  \item \textbf{The governing parameter is the bushing spacing $b$, not the rod
+        diameter.} Equation~\eqref{eq:bushing} makes the moment term inversely
+        proportional to $b$: moving the two bushings from \SI{60}{\milli\metre} to
+        \SI{100}{\milli\metre} apart raises the safety factor from 1.87 to 3.12 at
+        no cost in material. Increasing the rod diameter instead would do nothing for the
+        bushing load at all. If one change is made to this machine, this is the one.
+  \item \textbf{The rods are stiff enough but they dominate the machine's compliance.}
+        Their bending stress is \SI{8.7}{\mega\pascal} against \SI{350}{\mega\pascal}
+        (safety factor 40), so strength is irrelevant; but their worst mid-span deflection
+        of \SI{0.154}{\milli\metre} is larger than the \SI{0.102}{\milli\metre} of the
+        whole welded frame (Sheet~5). Guides and frame together give roughly
+        \SI{0.26}{\milli\metre}, which still meets the \SI{1}{\milli\metre} accuracy
+        requirement of Delivery~1, but the guides --- not the chassis --- are where the
+        accuracy is lost.
+\end{enumerate}
+
+%==============================================================================
+\sheet{Sheet 5 -- Chassis finite element verification}{D. Zuluaga}
 %==============================================================================
 \section{Description}\label{sec:fea-desc}
 
@@ -868,69 +1059,122 @@ Maximum displacement              & \SI{0.102}{\milli\metre} \\
 \end{enumerate}
 
 %==============================================================================
-\sheet{Appendix A -- Corrections}
+\sheet{Appendix A -- Corrections}{Group 2}
 %==============================================================================
 \section{Corrections to the previous calculation memo}\label{sec:corrections}
 
 The earlier version of this memo contained a number of results that cannot be correct on
 physical grounds. Each of them is listed below with the reason it is wrong and the value
 that replaces it. All the replacement values come from the recomputation documented in
-Sheets 1--4.
+Sheets 1--5. The page references are to
+\texttt{06\_Original\_Submission\_ES/MemoriaCalculosGrupo2Maquinas1.pdf}.
 
 \renewcommand{\arraystretch}{1.25}
-\begin{longtable}{@{}p{0.6cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{4.9cm}@{}}
+\begin{longtable}{@{}p{0.5cm}>{\raggedright\arraybackslash}p{3.9cm}>{\raggedright\arraybackslash}p{4.7cm}>{\raggedright\arraybackslash}p{4.9cm}@{}}
 \toprule
 \textbf{\#} & \textbf{Previous result} & \textbf{Why it cannot be right} & \textbf{Corrected value} \\
 \midrule
 \endhead
-1 & Screw efficiency reported above \SI{100}{\percent}
-  & Efficiency is the ratio of useful work to input work; a value above 1 would create
-    energy. The error came from inverting the numerator and denominator of
-    equation~\eqref{eq:eff}.
-  & $e=F L/(2\pi T_R)=\SI{64.1}{\percent}$ \\
-2 & Thread shear stress \SI{2379.96}{\mega\pascal}
-  & Six times the yield strength of the material. The shear area was taken as a single
-    thread root cross-section instead of the cylindrical surface of the engaged threads.
-  & $\tau=2F/(\pi d_r p\,n_t)=\SI{3.77}{\mega\pascal}$ \\
-3 & Critical load written as $P_{cr}=2EI/\ell^2$ with $E=\SI{20000}{\mega\pascal}$
-  & The Euler formula is $\pi^2EI/(K\ell)^2$, and the modulus of steel is
-    \SI{207000}{\mega\pascal}, not \SI{20000}{\mega\pascal}. Two independent errors in the
-    same expression.
-  & $P_{cr}=\pi^2EI/(K\ell)^2=\SI{519.9}{\newton}$, $n=3.21$ \\
-4 & Slenderness ratio inconsistent with the regime used
-  & The radius of gyration was taken as $d_r/2$ instead of $d_r/4$, which placed the screw
-    in the Johnson regime when it is a long Euler column.
-  & $\ell/r_g=333$ against a transition value of 105 $\Rightarrow$ Euler regime \\
-5 & Two different axial stresses for the same screw, \SI{3.438}{\mega\pascal} and
-    \SI{72.21}{\mega\pascal}
-  & The two values differ by a factor of 21; the second used the thread-root \emph{area}
-    where a diameter belonged.
+\multicolumn{4}{@{}l}{\textbf{A. Two sheets for the same screw}}\\
+\midrule
+1 & The sheets \emph{Tornillo de potencia} (pp.~23--29) and \emph{Gu\'ias par R}
+    (pp.~30--37) calculate the same screw and disagree on every line
+  & Same formulas, different arithmetic. $T_c$: 9.114 vs.\ \SI{27.342}{\newton\milli\metre};
+    $T_{\text{lower}}$: $-85.271$ vs.\ $-67.048$; $e$: 0.6202 vs.\ 1.948;
+    $\sigma_a$: 3.438 vs.\ \SI{72.21}{\mega\pascal};
+    $\tau_{\text{thread}}$: 0.1958 vs.\ \SI{2379.96}{\mega\pascal};
+    $P_{cr}$: 93.06 vs.\ \SI{9428.8}{\newton}. At most one of each pair could be right; in
+    fact both are, because the formulas themselves are wrong.
+  & One screw, one sheet: Sheet~3, with $T_R=\SI{321.6}{\newton\milli\metre}$,
+    $e=\SI{64.1}{\percent}$, $\sigma_a=\SI{5.73}{\mega\pascal}$,
+    $\tau_{\text{thread}}=\SI{3.77}{\mega\pascal}$, $P_{cr}=\SI{519.9}{\newton}$ \\
+2 & The guides themselves were never verified: the sheet titled \emph{Gu\'ias par R}
+    repeats the screw calculation
+  & The whole point of that sheet --- can the bushings and rods take the moment the arms
+    apply to the carriage? --- is never asked.
+  & New Sheet~4. The guides turn out to hold the \emph{tightest} margin of the machine,
+    $n_0=1.87$ \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{B. Lead screw}}\\
+\midrule
+3 & $e_{\text{ascenso}} = 1.948$ (p.~35)
+  & Efficiency above 1 would create energy. The expression was inverted, and $2$ was used
+    where $2\pi$ belongs.
+  & $e=FL/(2\pi T_R)=\SI{64.1}{\percent}$ \\
+4 & $T = P\,\frac{d_p}{2}\,d_p\cos\theta\,f$ (pp.~25, 33)
+  & Dimensionally inconsistent: it returns \si{\newton\milli\metre\squared}. It is not the
+    power-screw relation, and it contains neither the lead nor the sign change between
+    raising and lowering.
+  & Shigley, equations~\eqref{eq:TR} and~\eqref{eq:TL} \\
+5 & $T_c = \SI{27.342}{\newton\milli\metre}$ (p.~34)
+  & $T_c=\mu_c F d_c/2$ with $d_c=\SI{6}{\milli\metre}$ gives a lever of
+    \SI{3}{\milli\metre}, not \SI{9}{\milli\metre}. The other sheet got this one right.
+  & $T_c = \SI{9.72}{\newton\milli\metre}$ at the corrected design load \\
+6 & Thread shear \SI{2379.96}{\mega\pascal} (p.~36)
+  & Six times the yield strength of any screw steel. The shear area was written as
+    $(d_r w)^2/4A w$, which is not an area of anything.
+  & $\tau=2F/(\pi d_r w p\,n_t)=\SI{3.77}{\mega\pascal}$, $n_{\text{thread}}=56.6$ \\
+7 & $\sigma_a = 16 P (d_p+d_r)^2/(\pi d_r^4)$, giving \SI{3.438}{\mega\pascal} on p.~28
+    and \SI{72.21}{\mega\pascal} on p.~35
+  & That is a bending expression, not an axial one; an axial stress is force over area.
+    Evaluated correctly the wrong formula gives \SI{72.2}{\mega\pascal}, so the
+    \SI{3.438}{\mega\pascal} is also an arithmetic slip.
   & $\sigma_a=F/A_r=\SI{5.73}{\mega\pascal}$ \\
-6 & Static analysis returning zero reactions at every joint
-  & The trivial solution of a homogeneous system. The equilibrium matrix had been
-    assembled without the external load vector, so the solver returned $\bm x=\bm 0$.
-  & 60 equations, 63 unknowns, rank 60; minimum-norm solution, residual
-    $<\SI{3e-9}{\newton}$, cross-checked by virtual work \\
-7 & Pitch, lead and diameters used interchangeably
-  & With 4 starts the lead is four times the pitch; using $p$ where $L$ belongs changes the
-    lead angle from \SI{19.99}{\degree} to \SI{5.2}{\degree} and reverses the self-locking
-    conclusion.
-  & $p=\SI{2}{\milli\metre}$, $L=n_sp=\SI{8}{\milli\metre}$, $d_m=\SI{7}{\milli\metre}$,
-    $d_r=\SI{6}{\milli\metre}$ \\
-8 & Cutting force applied upwards
-  & An end mill pushes the work downwards against the table; applied upwards it partially
-    cancels the weight of the moving assembly and under-predicts the load on the vertical
-    screw.
-  & $\bm F_c=[80,80,-120]^{\mathsf T}$\,\si{\newton} $\Rightarrow$ design load
-    \SI{162.0}{\newton} instead of \SI{85}{\newton} \\
-9 & Self-locking claimed for the vertical axis
-  & Consequence of \#7. A 4-start screw with $\mu=0.15$ cannot be self-locking.
-  & Not self-locking; a brake or permanent holding current is required on $z$ \\
-10 & No verification of the kinematic solution
-  & A position solution with no residual and no independent check cannot be audited.
-  & Newton--Raphson residual $<\SI{8e-11}{\milli\metre}$, agreement with the closed-form
-    inverse kinematics to $10^{-13}$\,mm, velocities and accelerations checked against
-    finite differences \\
+8 & $P_{cr}=2EI/\ell^2$ with $E=\SI{20000}{\mega\pascal}$, giving \SI{93.06}{\newton}
+    (p.~29) and \SI{9428.8}{\newton} (p.~37)
+  & The Euler load is $\pi^2EI/(K\ell)^2$, and steel has $E=\SI{207000}{\mega\pascal}$.
+    The two answers differ by a factor of exactly 100, so at least one is also an
+    arithmetic slip.
+  & $P_{cr}=\pi^2EI/(K\ell)^2=\SI{519.9}{\newton}$, $n=3.21$ \\
+9 & Slenderness $S_r=\ell/(I/A)=285.7$ with $A=4\pi d_r^2$ (p.~29)
+  & Slenderness is $\ell/r_g$ with $r_g=\sqrt{I/A}$, and the area of a circle is
+    $\pi d_r^2/4$, not $4\pi d_r^2$. The value was never used to choose between the Euler
+    and the Johnson regime.
+  & $\ell/r_g=333$ against a transition of 105 $\Rightarrow$ Euler regime \\
+10 & $p=\SI{4}{\milli\metre}$ with 2 starts, yet $d_r=\SI{7}{\milli\metre}$ throughout
+   & The two are incompatible: $d_r=d-p$ gives \SI{4}{\milli\metre} for $p=4$. A root
+     diameter of \SI{7}{\milli\metre} corresponds to $p=\SI{2}{\milli\metre}$, which is
+     the screw actually fitted.
+   & Tr8$\times$8(P2), 4 starts: $p=\SI{2}{\milli\metre}$, $L=\SI{8}{\milli\metre}$,
+     $d_m=\SI{7}{\milli\metre}$, $d_r=\SI{6}{\milli\metre}$ \\
+11 & Self-locking claimed for the vertical axis
+   & Consequence of \#10. A 4-start screw with $\mu=0.15$ cannot be self-locking.
+   & Not self-locking; a brake or permanent holding current is required on $z$ \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{C. Statics}}\\
+\midrule
+12 & ``27 equations and 27 unknowns'', ``8 bars with 9 binary revolute pairs'' (p.~3)
+   & The machine has 10 moving bodies and 12 joints. The three prismatic joints were left
+     out of the model altogether.
+   & 60 equations, 63 unknowns, rank 60, 3 redundant reactions \\
+13 & The actuator forces never appear in the results (p.~7)
+   & They are the reason a static analysis is done at all: without them the screw and the
+     motor cannot be sized. Leaving the prismatic joints out of the model removed them.
+   & $F_x=F_y=\SI{-80.9}{\newton}$, $F_z=\SI{+157.9}{\newton}$ at home; design load
+     \SI{162.0}{\newton} \\
+14 & Reactions of 0 to \SI{10}{\newton}, most of them exactly zero (p.~7)
+   & A \SI{120}{\newton} cutting force cannot produce \SI{5.77}{\newton} of reaction. An
+     all-zero solution is the trivial solution of a system assembled without its load
+     vector.
+   & Residual below \SI{3e-9}{\newton}, cross-checked by virtual work \\
+15 & Cutting force applied upwards
+   & An end mill pushes the work downwards against the table; applied upwards it cancels
+     part of the weight of the moving assembly and under-predicts the load on the vertical
+     screw.
+   & $\bm F_c=[80,80,-120]^{\mathsf T}$\,\si{\newton} $\Rightarrow$ design load
+     \SI{162.0}{\newton} instead of \SI{85}{\newton} \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{D. Kinematics and presentation}}\\
+\midrule
+16 & No verification of the kinematic solution
+   & A position solution with no residual and no independent check cannot be audited.
+   & Newton--Raphson residual below \SI{8e-11}{\milli\metre}, agreement with the
+     closed-form inverse kinematics to $10^{-13}$\,mm, velocities and accelerations
+     checked against finite differences \\
+17 & The chassis sheet (pp.~38--60) carries no date and no reviewer
+   & An unsigned, undated calculation sheet cannot be released.
+   & Every sheet of this edition carries project, calculation, analyst, reviewer, date and
+     page \\
 \bottomrule
 \end{longtable}
 \renewcommand{\arraystretch}{1}
@@ -944,13 +1188,18 @@ None of the corrections invalidates the machine. The two that matter in practice
         \SI{162.0}{\newton}. The screw still passes every check, but the buckling safety
         factor drops from about 6 to 3.21, which is why the column check --- and not the
         stress check --- is now the governing criterion for the transmission.
-  \item \textbf{Correction 9} changes an operating requirement: the vertical axis is not
+  \item \textbf{Correction 11} changes an operating requirement: the vertical axis is not
         self-locking and needs a brake or a permanently energised motor. This is a safety
         item that the previous memo did not identify.
+  \item \textbf{Correction 2} changes where the attention should go. Because the sheet
+        that was supposed to verify the guides verified the screw instead, nobody ever
+        computed the load on the bushings. It turns out to be the tightest margin in the
+        machine ($n_0=1.87$), and it is fixed by moving two bushings further apart --- the
+        cheapest change available anywhere in this design.
 \end{itemize}
 
 %==============================================================================
-\sheet{Appendix B -- Calculation software}
+\sheet{Appendix B -- Calculation software}{Group 2}
 %==============================================================================
 \section{Reproducing the results}\label{sec:software}
 
@@ -973,6 +1222,7 @@ writes the results to \texttt{results/} (CSV and JSON) and \texttt{figures/} (PN
 \texttt{kinematics.py}     & Constraints, Jacobian, $\dot{\bm J}$, Newton--Raphson solver, closed-form inverse kinematics, trajectory generation, workspace mapping. \\
 \texttt{statics.py}        & Assembly of the 60$\times$63 equilibrium system, minimum-norm solution, virtual-work actuator forces, arm section properties and bending stresses. \\
 \texttt{power\_screw.py}   & Screw geometry, raising/lowering torque, efficiency, self-locking, stresses, Euler/Johnson column check. \\
+\texttt{guides.py}         & Splits the prismatic-joint reaction into transverse force, roll and pitch/yaw moment; bushing loads, rod stress and deflection, sensitivity to the bushing spacing. \\
 \texttt{fea\_postprocess.py}& Reads the nodal data exported from SolidWorks Simulation and computes the ranges and safety factors of Sheet~4. \\
 \texttt{run\_all.py}       & Runs the four studies and writes results and figures. \\
 \bottomrule
@@ -993,6 +1243,7 @@ Position   & Newton--Raphson on $\bm\Phi(\bm q,t)=\bm 0$ & Closed-form 2R invers
 Velocity, acceleration & Analytical $\bm J$, $\dot{\bm J}$ & Finite differences of the position solution \\
 Actuator forces & 60$\times$63 rigid-body equilibrium & Principle of virtual work \\
 Screw & Shigley closed-form expressions & Dimensional and physical bounds ($e\le1$, $\sigma<S_y$) \\
+Guides & Prismatic-joint reactions of Sheet~2 & Free-body couple check on the carriage \\
 Chassis & Finite elements & Order-of-magnitude hand check of the rails in bending \\
 \bottomrule
 \end{tabular}

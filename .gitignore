@@ -39,6 +39,5 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
-# SolidWorks simulation result databases (regenerable, large)
-*.CWR
-*.cwr
+# Original Spanish submission kept locally only
+06_Original_Submission_ES/
