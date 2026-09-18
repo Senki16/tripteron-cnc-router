@@ -79,9 +79,8 @@ transformation. Both properties are proved numerically in the calculation report
 05_CAD/
     Source_Models/                 SolidWorks parts, assemblies and drawings, by group
     Archives/                      large .zip/.rar exports (kept locally, not versioned)
-06_Original_Submission_ES/         The original Spanish submission (kept locally, not versioned)
-07_Reference/                      Motor datasheets, component dimensions, course material
-08_Media/                          Video of the machine running
+06_Reference/                      Motor datasheets, component dimensions, course material
+07_Media/                          Video of the machine running
 docs/images/                       Images used by this README
 ```
 
