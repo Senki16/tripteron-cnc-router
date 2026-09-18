@@ -129,7 +129,25 @@ had never been checked.
 \end{center}
 
 The authorship of every sheet is the one of the original submission, so that this
-corrected edition can be read side by side with it.
+corrected edition can be read side by side with it. The five sections of the original memo
+are all here and none was dropped:
+
+\begin{center}\small
+\begin{tabular}{@{}ll l@{}}
+\toprule
+\textbf{Original memo} & \textbf{Pages} & \textbf{This edition} \\
+\midrule
+1. C\'alculos est\'aticos        & 3--7   & Sheet 2 \\
+2. C\'alculos cinem\'aticos      & 8--22  & Sheet 1 \\
+3. C\'alculos tornillo de potencia & 23--29 & Sheet 3 \\
+4. C\'alculos gu\'ia par R       & 30--37 & Sheet 3 (its screw content) + Sheet 4 (the guides it never checked) \\
+5. C\'alculos chasis, MEF        & 38--60 & Sheet 5, with its original plots \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Kinematics is placed first because the static analysis needs the poses it produces; in the
+original memo the two appear in the opposite order.
 
 \subsection{Reference frame and nomenclature}
 
@@ -874,6 +892,37 @@ F_{r} = \frac{F_t}{2} + \frac{M_{\parallel}}{s},
 \sigma_b = \frac{F_r\,\ell}{4W}.
 \end{equation}
 
+\section{What the original sheet contained}\label{sec:gui-orig}
+
+Nothing of the original \emph{Gu\'ias par R} sheet is dropped; it is relocated. That sheet
+set out to determine, in its own words, the raising and lowering torque, the total torque,
+the efficiency, the shear stress in torsion and the buckling --- all of them properties of
+the \emph{lead screw}, not of the guides, and all of them already computed in Sheet~3.
+The table below says where each of its objectives is answered and with what value.
+
+\begin{center}\small
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{4.6cm}l l@{}}
+\toprule
+\textbf{Original objective} & \textbf{Answered in} & \textbf{Original value} & \textbf{Corrected value} \\
+\midrule
+Raising torque $T_s$        & Sheet 3, eq.~\eqref{eq:TR} & \SI{302.72}{\newton\milli\metre} & \SI{311.9}{\newton\milli\metre} \\
+Lowering torque $T_d$       & Sheet 3, eq.~\eqref{eq:TL} & \SI{-94.39}{\newton\milli\metre} & \SI{-111.9}{\newton\milli\metre} \\
+Collar torque $T_c$         & Sheet 3                    & \SI{27.342}{\newton\milli\metre} & \SI{9.7}{\newton\milli\metre} \\
+Total raising torque        & Sheet 3                    & \SI{311.838}{\newton\milli\metre} & \SI{321.6}{\newton\milli\metre} \\
+Total lowering torque       & Sheet 3                    & \SI{-67.048}{\newton\milli\metre} & \SI{-102.2}{\newton\milli\metre} \\
+Efficiency                  & Sheet 3, eq.~\eqref{eq:eff} & 1.948 & \SI{64.1}{\percent} \\
+Torsional shear             & Sheet 3                    & \SI{4.63}{\mega\pascal} & \SI{7.58}{\mega\pascal} \\
+Thread shear                & Sheet 3                    & \SI{2379.96}{\mega\pascal} & \SI{3.77}{\mega\pascal} \\
+Axial stress                & Sheet 3                    & \SI{72.21}{\mega\pascal} & \SI{5.73}{\mega\pascal} \\
+Buckling $P_{cr}$           & Sheet 3                    & \SI{9428.8}{\newton} & \SI{519.9}{\newton} \\
+Self-locking                & Sheet 3                    & not satisfied & not satisfied (confirmed) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+What follows is what that sheet was named after and never did: the verification of the
+guides themselves.
+
 \section{Results}\label{sec:gui-res}
 
 \begin{center}
@@ -957,43 +1006,151 @@ load comes from, and how it depends on the bushing spacing.}
 \section{Description}\label{sec:fea-desc}
 
 The three legs are mounted on a welded frame of square steel tubing that also carries the
-work table. The frame is the component whose behaviour cannot be captured by a hand
-calculation, because it is a three-dimensional redundant structure, so it was verified by
-finite elements in SolidWorks Simulation. This sheet reports and interprets those results;
-the raw nodal data exported from the solver are stored in
-\texttt{04\_Calculations/data/fea\_exports/} and are post-processed by the same Python
-package that produced the rest of this report, so the numbers below are not transcribed by
-hand.
+work table. The frame is the one component whose behaviour cannot be captured by a hand
+calculation: it is a three-dimensional redundant structure, so it was verified by finite
+elements in SolidWorks Simulation.
+
+This sheet keeps the original study in full --- its model, its loads, its nine result plots
+and its conclusions --- and adds to it the post-processing of the exported nodal data, so
+that every number quoted here is reproducible from the files in the repository rather than
+read off a screenshot. The raw exports live in
+\texttt{04\_Calculations/data/fea\_exports/} and are processed by
+\texttt{tripteron/fea\_postprocess.py}.
 
 \section{Objective of the calculation}\label{sec:fea-obj}
 
 \begin{enumerate}[leftmargin=*,nosep]
-  \item Verify that the frame stays in the elastic range under the reactions computed in
-        Sheet~2.
+  \item Verify that the frame stays in the elastic range under the weight of the three
+        axis assemblies and the reactions of Sheet~2.
   \item Verify that its deflection is small compared with the machining tolerance.
   \item Verify the frame against global buckling.
 \end{enumerate}
 
-\section{Variables and model}\label{sec:fea-model}
+\section{Variables of the calculation model}\label{sec:fea-var}
 
 \begin{center}
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}cl c@{}}
 \toprule
-Element type      & Beam elements (welded tubular frame) \\
-Material          & Alloy steel, $E=\SI{210}{\giga\pascal}$, $S_y=\SI{620}{\mega\pascal}$ \\
-Boundary condition& Four feet fixed to the floor \\
-Loads             & Joint reactions from Sheet~2 plus self weight \\
-Studies           & Linear static + linear (eigenvalue) buckling \\
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} \\
+\midrule
+$F_1$ & Total weight carried by axis 1 & \SI{9.762}{\kilo\gram} = \SI{95.75}{\newton} \\
+$F_2$ & Total weight carried by axis 2 & \SI{9.762}{\kilo\gram} = \SI{95.75}{\newton} \\
+$F_3$ & Total weight carried by axis 3 & \SI{9.762}{\kilo\gram} = \SI{95.75}{\newton} \\
+$P_m$ & Mass of one NEMA 34 motor      & \SI{5.216}{\kilo\gram} \\
+$P_t$ & Mass of one lead screw         & \SI{1.120}{\kilo\gram} \\
+$P_g$ & Mass of one linear guide       & \SI{2.530}{\kilo\gram} \\
+$P_h$ & Mass of one arm                & \SI{0.322}{\kilo\gram} \\
+$P_e$ & Mass of the end effector       & \SI{0.574}{\kilo\gram} \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-Beam elements are appropriate here: the frame is made of slender tubes loaded mainly in
-bending and axial force, welded at the nodes, and a beam idealisation reproduces that
-behaviour with a fraction of the degrees of freedom of a solid mesh. Local weld stresses
-are not captured by this model and are covered by the weld sizing of Delivery 2.
+All masses were read from the SolidWorks physical-properties tool; each axis load is the
+sum of the components that rest on that beam, so they carry a small approximation error.
 
-\section{Results}\label{sec:fea-res}
+\section{Image of the calculation model}\label{sec:fea-img}
+
+\begin{figure}[htbp]\centering
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_model_loads.png}\\[3pt]
+{\footnotesize Applied forces and fixed supports}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_model_weights.png}\\[3pt]
+{\footnotesize Components whose weight loads the frame}
+\end{minipage}
+\caption{Calculation model: the four fixed feet, the three axis loads and the components
+whose weight produces them.}
+\end{figure}
+\FloatBarrier
+
+\section{Values and calculation model}\label{sec:fea-model}
+
+\begin{center}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{10.6cm}@{}}
+\toprule
+Geometry          & Chassis CAD at full size, welded tubular frame \\
+Element type      & Beam elements \\
+Material          & Alloy steel, $E=\SI{210}{\giga\pascal}$, $S_y=\SI{620}{\mega\pascal}$ \\
+Interaction       & Global interaction, rigid joints, independent meshing \\
+Fixation          & Four fixed restraints, one per foot \\
+External loads    & Three forces of \SI{95.75}{\newton} on their respective beams \\
+Mesh              & Curvature-based mesh, standard density \\
+Studies           & Linear static analysis and linear (eigenvalue) buckling analysis \\
+Post-processing   & Nodal values read with \emph{identify values} on the loaded faces and
+                    exported to CSV \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Beam elements are the right idealisation here: the frame is made of slender tubes loaded
+mainly in bending and axial force and welded at the nodes, and a beam model reproduces
+that behaviour with a fraction of the degrees of freedom of a solid mesh. Local weld
+stresses are not captured and are covered by the weld sizing of Delivery~2.
+
+\subsection{Scope of the load case}
+
+The load applied in the finite element model is the \emph{self weight} of the three axis
+assemblies, \SI{95.75}{\newton} each. It does not include the cutting force, whose
+reactions were only obtained later, in Sheet~2. Those reactions reach
+\SI{162}{\newton} on the vertical axis, i.e.\ \SI{69}{\percent} more than the weight
+already applied on that beam. Because the static safety factor of the frame is 66, adding
+them cannot bring the structure anywhere near its limit; the deflection, however, would
+grow roughly in proportion, so the \SI{0.102}{\milli\metre} below should be read as the
+figure for a machine at rest and about \SI{0.17}{\milli\metre} while cutting.
+
+\section{Results of the calculation model}\label{sec:fea-res}
+
+\subsection{Static analysis}
+
+\begin{figure}[htbp]\centering
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_bending.png}\\[2pt]{\footnotesize Bending stress [MPa]}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_axial.png}\\[2pt]{\footnotesize Axial stress [MPa]}
+\end{minipage}
+
+\vspace{8pt}
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_shear1.png}\\[2pt]{\footnotesize Shear stress, direction 1 [MPa]}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_shear2.png}\\[2pt]{\footnotesize Shear stress, direction 2 [MPa]}
+\end{minipage}
+
+\vspace{8pt}
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_strain.png}\\[2pt]{\footnotesize Strain [--]}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_displacement.png}\\[2pt]{\footnotesize Resultant displacement [mm]}
+\end{minipage}
+\caption{Static analysis of the chassis: stress components, strain and displacement.}
+\end{figure}
+\FloatBarrier
+
+\subsection{Buckling analysis}
+
+\begin{figure}[htbp]\centering
+\begin{minipage}[t]{0.32\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_buckling_x.png}\\[2pt]{\footnotesize Mode 1, amplitude $x$ [mm]}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_buckling_y.png}\\[2pt]{\footnotesize Mode 1, amplitude $y$ [mm]}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fea_buckling_z.png}\\[2pt]{\footnotesize Mode 1, amplitude $z$ [mm]}
+\end{minipage}
+\caption{First buckling mode of the frame: a lateral sway of the uprights.}
+\end{figure}
+\FloatBarrier
+
+\subsection{Exported values}
+
+The nodal values read on the loaded faces were exported and post-processed by
+\texttt{fea\_postprocess.py}; the table below replaces the nine value tables of the
+original study with a single one, and the figure replaces its nine graphs.
 
 \begin{center}
 \begin{tabular}{@{}lrrrr@{}}
@@ -1029,11 +1186,11 @@ Maximum displacement              & \SI{0.102}{\milli\metre} \\
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=0.92\textwidth]{figures/fea_summary.png}
-\caption{Finite element results: range of each exported quantity and resulting margins.}
+\caption{Range of each exported quantity and the resulting margins.}
 \end{figure}
 \FloatBarrier
 
-\section{Conclusions}\label{sec:fea-conc}
+\section{Results and conclusions of the calculation model}\label{sec:fea-conc}
 
 \begin{enumerate}[leftmargin=*]
   \item \textbf{The frame is massively over-strength.} A safety factor of 66 against yield
@@ -1045,9 +1202,9 @@ Maximum displacement              & \SI{0.102}{\milli\metre} \\
         \SI{0.102}{\milli\metre} occurs at the top rail, furthest from the feet. Referred
         to the \SI{200}{\milli\metre} workspace this is \SI{0.05}{\percent}, and it is of
         the same order as the positioning resolution of the drives. It is acceptable for
-        the intended use (light milling of aluminium and plastics) but it is the single
-        number that limits the achievable accuracy of the machine, so any future increase
-        of the cutting force should be checked against it first.
+        the intended use (light milling of aluminium and plastics), but it is one of the
+        two numbers that limit the achievable accuracy of the machine --- the other being
+        the \SI{0.154}{\milli\metre} of the guide rods in Sheet~4, which is larger.
   \item \textbf{The dominant stress is bending}, an order of magnitude above the axial and
         shear components. The load path is therefore what one would expect: the reactions
         of the legs are applied off the neutral axis of the rails and are carried in
@@ -1056,7 +1213,12 @@ Maximum displacement              & \SI{0.102}{\milli\metre} \\
   \item \textbf{Global buckling is irrelevant} for this structure at this load level. The
         first mode is a lateral sway of the uprights, and it would require 2238 times the
         service load to occur.
+  \item \textbf{The load case can be tightened.} Rerunning the study with the joint
+        reactions of Sheet~2 instead of the bare self weight would not change any
+        conclusion, but it would give a deflection figure valid while cutting. That is the
+        one change worth making to this study.
 \end{enumerate}
+
 
 %==============================================================================
 \sheet{Appendix A -- Corrections}{Group 2}

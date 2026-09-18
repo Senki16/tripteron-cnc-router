@@ -1,0 +1,146 @@
+\documentclass[10pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage[table]{xcolor}
+\usepackage[a4paper,landscape,left=1cm,right=1cm,top=1.1cm,bottom=1.1cm]{geometry}
+\usepackage{fancyhdr}
+\definecolor{eafitblue}{HTML}{16436f}
+\setlength{\parindent}{0pt}
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\newcommand{\drawing}[7]{%
+  \clearpage
+  {\color{eafitblue}\rule{\textwidth}{1pt}}\\[2pt]
+  {\footnotesize\textbf{Sheet #1}\quad\textbar\quad #2\quad\textbar\quad
+   Drawing no.\ #3\quad\textbar\quad Scale #4\quad\textbar\quad Drawn by #5\quad\textbar\quad #6}\\[1pt]
+  {\color{eafitblue}\rule{\textwidth}{0.4pt}}\\[3pt]
+  \vfill
+  \begin{center}\includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{sheets/#7.png}\end{center}
+  \vfill}
+\begin{document}
+\clearpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}\\[14pt]
+{\Huge\bfseries Group 1 -- Chassis and structure}\\[14pt]
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}
+\end{center}
+\vspace*{\fill}
+
+\drawing{1}{Structural table -- general drawing}{ME-001}{1:10}{D. Zuluaga Henao}{redrawn}{S01_structural_table}
+
+\drawing{2}{Sheet metal plate -- table top}{ME-002}{1:5}{D. Zuluaga Henao}{redrawn}{S02_sheet_metal_plate}
+
+\drawing{3}{Top support bracket}{ME-003}{1:2}{D. Zuluaga Henao}{redrawn}{S03_top_support_bracket}
+
+\drawing{4}{Motor support}{ME-004}{1:2}{D. Zuluaga Henao}{redrawn}{S04_motor_support}
+
+\drawing{5}{Pulley plate -- quarter sheet}{ME-005}{1:2}{D. Zuluaga Henao}{redrawn}{S05_pulley_plate}
+
+\drawing{6}{Motor side support}{ME-006}{1:1}{D. Zuluaga Henao}{redrawn}{S06_motor_side_support}
+
+\drawing{7}{Top support bracket 2}{ME-007}{1:1}{D. Zuluaga Henao}{redrawn}{S07_top_support_bracket_2}
+
+\drawing{8}{Support bracket 2}{ME-008}{1:2}{D. Zuluaga Henao}{redrawn}{S08_support_bracket_2}
+
+\clearpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}\\[14pt]
+{\Huge\bfseries Group 2 -- Electrical system}\\[14pt]
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}
+\end{center}
+\vspace*{\fill}
+
+\drawing{9}{Electrical box cover plate}{ME-009}{1:2}{D. Zuluaga Henao}{redrawn}{S09_cover_plate}
+
+\drawing{10}{Wiring diagram -- motor control system}{EE-001}{N/A}{D. Zuluaga Henao}{redrawn}{S10_wiring_diagram}
+
+\drawing{11}{Motor control schematic}{EE-001}{N/A}{D. Zuluaga Henao}{redrawn}{S11_motor_control_schematic}
+
+\drawing{12}{Electrical bill of materials}{EE-002}{N/A}{D. Zuluaga Henao}{redrawn}{S12_electrical_bom}
+
+\drawing{13}{Stepper motor driver wiring diagram}{EE-003}{N/A}{D. Zuluaga Henao}{redrawn}{S13_stepper_driver_wiring}
+
+\clearpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}\\[14pt]
+{\Huge\bfseries Group 3 -- Guide-supported axis system}\\[14pt]
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}
+\end{center}
+\vspace*{\fill}
+
+\drawing{14}{CNC router -- guide assembly}{ME-001}{1:3}{J. M. Rodr\'iguez}{as issued}{S14_guide_assembly}
+
+\drawing{15}{Guide 1 -- general views}{ME-002}{1:4}{J. M. Rodr\'iguez}{as issued}{S15_guide1_general_views}
+
+\drawing{16}{Guide 1 -- exploded view and component list}{ME-003}{1:3}{J. M. Rodr\'iguez}{as issued}{S16_guide1_exploded}
+
+\drawing{17}{Guide rail assembly}{ME-003}{1:2}{G. Ria\~no}{as issued}{S17_guide_rail_assembly}
+
+\drawing{18}{Guide 2 -- general views}{ME-004}{1:3}{G. Ria\~no}{as issued}{S18_guide2_general_views}
+
+\drawing{19}{Guide 3 -- general views}{ME-005}{1:3}{G. Ria\~no}{as issued}{S19_guide3_general_views}
+
+\drawing{20}{Guide carriage -- isometric view}{--}{2:1}{G. Ria\~no}{as issued}{S20_guide_carriage_iso}
+
+\drawing{21}{Guide carriage -- views}{ME-006}{1:2}{G. Ria\~no}{as issued}{S21_guide_carriage_views}
+
+\drawing{22}{Bearing support -- views}{ME-007}{1:1}{J. M. Rodr\'iguez}{as issued}{S22_bearing_support_views}
+
+\clearpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}\\[14pt]
+{\Huge\bfseries Group 4 -- Arms (R-pair system)}\\[14pt]
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}
+\end{center}
+\vspace*{\fill}
+
+\drawing{23}{Arm assembly -- component list}{--}{1:2}{R. Bueno}{as issued}{S23_arm_assembly}
+
+\drawing{24}{Elbow and bearing assembly -- section A--A}{--}{2:1}{D. Zuluaga Henao}{as issued}{S24_elbow_bearing_section}
+
+\drawing{25}{Bearing housing tube \O{}30, gauge 16}{--}{2:1}{R. Bueno}{as issued}{S25_bearing_housing_tube}
+
+\drawing{26}{Tube \O{}30, gauge 16}{--}{2:1}{R. Bueno}{as issued}{S26_tube_30mm}
+
+\drawing{27}{Arm -- fish-mouth cut, 1 in, 90\textdegree}{--}{1:2}{R. Bueno}{as issued}{S27_arm_fishmouth_cut}
+
+\drawing{28}{Milling tool support}{--}{2:1}{D. Amell Osorio}{as issued}{S28_milling_tool_support}
+
+\drawing{29}{Elbow assembly 1 -- section A--A and component list}{--}{1:10}{D. Zuluaga Henao}{as issued}{S29_elbow_assembly_section}
+
+\clearpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}\\[14pt]
+{\Huge\bfseries Group 5 -- Assembled machine}\\[14pt]
+{\color{eafitblue}\rule{0.8\textwidth}{1.4pt}}
+\end{center}
+\vspace*{\fill}
+
+\drawing{30}{Complete machine -- general views}{--}{1:10}{G. Ria\~no Barrera}{as issued}{S30_complete_machine_views}
+
+\drawing{31}{Complete machine -- exploded view and part list}{--}{1:10}{D. Amell Osorio}{as issued}{S31_complete_machine_exploded}
+
+\drawing{32}{Washer (spacer)}{--}{10:1}{D. Zuluaga Henao}{as issued}{S32_washer_spacer}
+
+\drawing{33}{Internal bearing spacer}{--}{5:1}{D. Zuluaga Henao}{as issued}{S33_internal_spacer}
+
+\drawing{34}{Bearing housing tube}{--}{2:1}{D. Zuluaga Henao}{as issued}{S34_bearing_housing_tube}
+
+\drawing{35}{Solid tube with bore}{--}{2:1}{D. Zuluaga Henao}{as issued}{S35_solid_tube_bore}
+
+\end{document}

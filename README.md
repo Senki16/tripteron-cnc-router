@@ -68,7 +68,8 @@ transformation. Both properties are proved numerically in the calculation report
 
 ```
 01_Delivery1_Proposal/             Design proposal: requirements, PDS, architecture selection
-02_Delivery2_Drawings/             Drawing package (English cover + index + 41 CAD sheets)
+02_Delivery2_Drawings/             Drawing package: English cover, index and the 35 drawing sheets
+    sheets/                        the sheets as PNG (13 redrawn in English, 22 as issued)
 03_Delivery3_Calculation_Report/   Calculation report: kinematics, statics, screw, FEA
 04_Calculations/                   Python package that produces every number and figure
     tripteron/                     parameters, kinematics, statics, power_screw, fea_postprocess
@@ -155,6 +156,15 @@ drawings. Excluded from version control by `.gitignore`, but present in the work
 the large `.zip` / `.rar` exports of the same models, the folder
 `06_Original_Submission_ES/` with the original Spanish submission, the LaTeX build
 products and the video of the running machine.
+
+## Drawing package
+
+`02_Delivery2_Drawings/Tripteron_Drawing_Package.pdf` is generated, not scanned: an
+English cover and index (`Drawing_Index.tex`) followed by one landscape page per sheet
+(`Drawing_Sheets.tex`, built from `sheets/`). Thirteen sheets — the whole chassis group and
+the whole electrical group — were drawn again with English title blocks and notes, keeping
+the original geometry and dimensions; the other twenty-two are reproduced exactly as
+submitted on 3 March 2024.
 
 ## Who did what
 
